@@ -338,9 +338,13 @@ Here are some helpful wikipedia pages for more info on what this data type repre
 - https://en.wikipedia.org/wiki/Graph_database#Background
 
 `node` represents a pair of a `post` and all of its children, which is an `internal-graph`
+
 `internal-graph` is a tagged union representing the state that children can be in. Either a `node` has children in the form of a `graph`, or does not have any and is labeled as `%empty`. 
+
 `marked-graph` is the pair of a `graph` and an optionally present `mark`, which is used by %graph-store to validate a graph against the provided validator (recall that validators are marks).
+
 `graphs` is a mapping between `resource`s and`marked-graph`s
+
 `network` is the highest level data structure used by the %graph-store gall agent to represent all the information that the agent is aware of.
 
 
@@ -351,7 +355,7 @@ Here are some helpful wikipedia pages for more info on what this data type repre
 +$  tag-queries   (jug term resource)
 ```
 
-`tag-queries` is a mapping where the keys are terms and the values are a set of resources. It is a simple tagging system that allows for various ad-hoc collections, similar to filesystem tags being used to sort different files/folders. Although it is implemented in graph-store and fully functional, it is currently unused by graph-store itself or any existing applications. While the type’s name is `tag-queries`, there is no complex querying system as of now. Currently, you can add term/resources pairs into the tag queries, get a list of all terms in tag-queries, and get the whole jug out of %graph-store.
+`tag-queries` is a mapping where the keys are terms and the values are a set of resources. It is a simple tagging system that allows for various ad-hoc collections, similar to filesystem tags being used to sort different files/folders. Although it is implemented in graph-store and fully functional, it is currently unused by Graph Store itself or any existing applications. While the type’s name is `tag-queries`, there is no complex querying system as of now. Currently, you can add term/resources pairs into the tag queries, get a list of all terms in tag-queries, and get the whole `jug` out of Graph Store.
 
 **Update (Part 1)**
 ```
