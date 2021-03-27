@@ -797,24 +797,38 @@ TODO stubbed out section
 ```
 
 `graph-permissions-add`
-1. Accept a noun `vip` of type vip-metadata
-1. Switch on the index of the post found in `i`, crashing if no successful matches occur
-1. If the index is nested one level deep, return a `permissions` noun defined as:
-  - Admin - %yes
-  - Writer - %yes
-  - Reader: %no
-1. If the index is nested three levels deep and has a 1 as its 2nd index fragment, return a `permissions` noun defined as:
-  - Admin - %self
-  - Writer - %self
-  - Reader: %no
-1. If the index is nested three levels deep and has a 2 as its 2nd index fragment, return a `permissions` noun defined as:
-  - Admin - %yes
-  - Writer - %yes
-  - Reader: %yes if reader comments are enabled, else %no
-1. If the index is nested four levels deep and has a 2 as its 2nd index fragment, return a `permissions` noun defined as:
-  - Admin - %self
-  - Writer - %self
-  - Reader: %self
+<ol>
+    <li>Accept a noun <code>vip</code> of type vip-metadata</li>
+    <li>Switch on the index of the post found in <code>i</code>, crashing if no successful matches occur</li>
+    <li>If the index is nested one level deep, return a <code>permissions</code> noun defined as:
+        <ul>
+            <li>Admin - %yes</li>
+            <li>Writer - %yes</li>
+            <li>Reader: %no</li>
+        </ul>
+    </li>
+    <li>If the index is nested three levels deep and has a 1 as its 2nd index fragment, return a <code>permissions</code> noun defined as:
+        <ul>
+            <li>Admin - %self</li>
+            <li>Writer - %self</li>
+            <li>Reader: %no</li>
+        </ul>
+    </li>
+    <li>If the index is nested three levels deep and has a 2 as its 2nd index fragment, return a <code>permissions</code> noun defined as:
+        <ul>
+            <li>Admin - %yes</li>
+            <li>Writer - %yes</li>
+            <li>Reader: %yes if reader comments are enabled, else %no</li>
+        </ul>
+    </li>
+    <li>If the index is nested four levels deep and has a 2 as its 2nd index fragment, return a <code>permissions</code> noun defined as:
+        <ul>
+            <li>Admin - %self</li>
+            <li>Writer - %self</li>
+            <li>Reader: %self</li>
+        </ul>
+    </li>
+</ol>
 
 
 `graph-permissions-remove`
