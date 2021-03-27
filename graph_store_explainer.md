@@ -506,14 +506,14 @@ Here is the `grow` arm of mar/validator/chat.hoon
 ++  grow
   |%
   ++  graph-permissions-add
-    |=  vip=vip-metadata:met  :: 1
-    ?+  index.p.i  !!         :: 2
+    |=  vip=vip-metadata:met    :: 1
+    ?+  index.p.i  !!           :: 2
       [@ ~]  [%yes %yes %no]    :: 3
     ==
   ::
   ++  graph-permissions-remove
-    |=  vip=vip-metadata:met  :: 4
-    ?+  index.p.i  !!         :: 5
+    |=  vip=vip-metadata:met    :: 4
+    ?+  index.p.i  !!           :: 5
       [@ ~]  [%self %self %no]  :: 6
     ==
   ::
