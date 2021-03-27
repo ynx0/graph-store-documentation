@@ -724,7 +724,7 @@ Here’s its validator
 Walkthrough
 
 
-<ol style="ol[type="a"] {list-style-type: lower-alpha;}">
+<ol style="ol[type='a'] {list-style-type: lower-alpha;}">
   <!-- WHYYYYY GITHUB WHY -->
   <li>Get the post as a noun</li>
   <li>Force cast to indexed post</li>
