@@ -853,12 +853,18 @@ TODO stubbed out section
 
 
 `graph-permissions-remove`
-1. Accept a noun `vip` of type vip-metadata
-1. Switch on the index of the post found in `i`, crashing if no successful matches occur
-1. If the index is nested: (a) one level deep, (b) four levels deep with a 1 as it’s 2nd index fragment, (c) three levels deep and has a 2 as its 2nd index fragment, or (d) nested four levels deep and has a 2 as its 2nd index fragment, return a `permissions` noun defined as:
-  - Admin - %yes
-  - Writer - %self
-  - Reader: %self
+<ol>
+    <li>Accept a noun <code>vip</code> of type vip-metadata</li>
+    <li>Declare a variable <code>reader</code>, a flag which is true if reader comments are enabled, false otherwise</li>
+    <li>Switch on the index of the post found in <code>i</code>, crashing if no successful matches occur</li>
+    <li>If the index is nested one level deep, two levels deep, or three levels deep, return a <code>permissions</code> noun defined as:
+        <ul>
+            <li>Admin - %yes</li>
+            <li>Writer - %self</li>
+            <li>Reader: %self</li>
+        </ul>
+    </li>
+</ol>
 
 ## Validators - General Patterns and Best Practices
 ### General Patterns
