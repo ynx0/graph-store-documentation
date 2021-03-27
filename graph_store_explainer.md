@@ -750,6 +750,7 @@ Walkthrough
   <li>If the node is nested four levels deep, and has a 2 as it’s second index fragment
     <ol type="a"><li>Ensure that contents has type `cell`. This is a specific revision of a comment</li></ol>
   </li>
+</ol>
 
 Items 1-3 are setting up the validator
 Items 4-6 are enforcing the schema for the post in general
@@ -797,7 +798,8 @@ TODO stubbed out section
 ```
 
 `graph-permissions-add`
-<ol>
+
+  <ol>
     <li>Accept a noun <code>vip</code> of type vip-metadata</li>
     <li>Switch on the index of the post found in <code>i</code>, crashing if no successful matches occur</li>
     <li>If the index is nested one level deep, return a <code>permissions</code> noun defined as:
