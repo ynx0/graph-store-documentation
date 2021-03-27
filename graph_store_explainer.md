@@ -729,7 +729,6 @@ Walkthrough
 
 1.If the node is nested one level deep
   a. Ensure that its contents are empty. The top level node is a structural node containing all of the post and associated data.
-
 1. If it is nested 2 levels deep and contains a 1 as it’s last index fragment
   a. Ensure that its contents are empty. This is a structural node for holding revisions to the blog post.
 1. If the node is nested three levels deep, and has a 1 as it’s second index fragment
