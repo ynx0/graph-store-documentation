@@ -102,14 +102,9 @@ There are also three different levels of access a given permission level can hav
 - %self - user has add or remove privileges for child nodes only if they authored the parent node (determined by `author` of post, i.e., they are the author of the post)
 
 
-***
-
-We’ll be taking a look at the validators for 3 of the apps in Landscape built with Graph Store: Chat, Links, and Publish. Before we do that, let’s look at some of the concrete types that graph-store uses.
-
-
 
 ## Sur File Walkthrough
-To gain some clarity, let’s go through the type definitions of some of the most used types when working with Graph Store.
+We’ll be taking a look at the validators for 3 of the apps in Landscape built with Graph Store: Chat, Links, and Publish. To gain some clarity, let’s go through the type definitions of some of the most used types when working with Graph Store.
 
 ### Post
 Here’s sur/post.hoon.
