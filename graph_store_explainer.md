@@ -673,13 +673,18 @@ Here’s how it is implemented:
 
 
 `graph-permissions-remove`
-1. Accept a noun `vip` of type vip-metadata
-1. Declare a variable `reader`, a flag which is true if reader comments are enabled, false otherwise
-1. Switch on the index of the post found in `i`, crashing if no successful matches occur
-1. If the index is nested one level deep, two levels deep, or three levels deep, return a `permissions` noun defined as:
-  - Admin - %yes
-  - Writer - %self
-  - Reader: %self
+<ol>
+    <li>Accept a noun <code>vip</code> of type vip-metadata</li>
+    <li>Declare a variable <code>reader</code>, a flag which is true if reader comments are enabled, false otherwise</li>
+    <li>Switch on the index of the post found in <code>i</code>, crashing if no successful matches occur</li>
+    <li>If the index is nested one level deep, two levels deep, or three levels deep, return a <code>permissions</code> noun defined as:
+        <ul>
+            <li>Admin - %yes</li>
+            <li>Writer - %self</li>
+            <li>Reader: %self</li>
+        </ul>
+    </li>
+</ol>
 
 We can see that not a lot is going on in this example. Just a simple switch statement that matches cases based on the index of the post, and returns the `permissions` values based on the theory explained earlier.
 
