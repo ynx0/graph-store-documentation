@@ -640,22 +640,36 @@ Here’s how it is implemented:
 ```
 
 `graph-permissions-add`
-1. Accept a noun `vip` of type vip-metadata
-  - Declare a variable `reader`, a flag which is true if reader comments are enabled, false
-otherwise
-1. Switch on the index of the post found in `i`, crashing if no successful matches occur
-1. If the index is nested one level deep, return a `permissions` noun defined as:
-  - Admin - %yes
-  - Writer - %yes
-  - Reader: %no
-1. If the index is nested two levels deep, return a `permissions` noun defined as:
-  - Admin - %yes
-  - Writer - %yes
-  - Reader: %yes if reader comments are enabled, else %no
-1. If the index is nested three levels deep, return a `permissions` noun defined as:
-  - Admin - %yes
-  - Writer - %yes
-  - Reader: %yes if reader comments are enabled, else %no
+<ol>
+    <li>Accept a noun <code>vip</code> of type vip-metadata
+        <ul>
+            <li>Declare a variable <code>reader</code>, a flag which is true if reader comments are enabled, false otherwise
+            </li>
+        </ul>
+    </li>
+    <li>Switch on the index of the post found in <code>i</code>, crashing if no successful matches occur</li>
+    <li>If the index is nested one level deep, return a <code>permissions</code> noun defined as:
+        <ul>
+            <li>Admin - %yes</li>
+            <li>Writer - %yes</li>
+            <li>Reader: %no</li>
+        </ul>
+    </li>
+    <li>If the index is nested two levels deep, return a <code>permissions</code> noun defined as:
+        <ul>
+            <li>Admin - %yes</li>
+            <li>Writer - %yes</li>
+            <li>Reader: %yes if reader comments are enabled, else %no</li>
+        </ul>
+    </li>
+    <li>If the index is nested three levels deep, return a <code>permissions</code> noun defined as:
+        <ul>
+            <li>Admin - %yes</li>
+            <li>Writer - %yes</li>
+            <li>Reader: %yes if reader comments are enabled, else %no</li>
+        </ul>
+    </li>
+</ol>
 
 
 `graph-permissions-remove`
