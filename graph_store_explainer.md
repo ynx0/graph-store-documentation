@@ -427,12 +427,19 @@ The reason for having the main CRUD actions being logged-updates is so that grap
   ?(%no %self %yes)
 ```
 
-These are the types from the permissioning system explained earlier. Notably, `permissions` is just a length-3 cell of `permissions-level`s for admin, writer, and reader respectively, which mimics the table-like format mentioned earlier.
+These are the types from the permissioning system explained earlier. `permissions` is just a length-3 cell of `permissions-level`s for admin, writer, and reader respectively, which mimics the table-like format mentioned earlier.
 
+***
 Now that you have an understanding of the `sur` files, we can take a look at some existing graph-store apps and their validators.
 
+
 ## Validator Walkthrough - Schema and Permissioning Implementation
-A brief note: the current set of applications use a special type known as `vip-metadata`, which stands for “variation in permission” (not to be confused with VIP meaning “very important person”). It is extra metadata attached to a post that is available to the permissioning arms that is mainly used to specify whether reader comments are enabled or disabled. It is not necessary in order to use %graph-store yourself. Here’s the source if you want to explore: https://github.com/urbit/urbit/blob/ac096d85ae847fcfe8786b51039c92c69abc006e/pkg/arvo/sur/metadata-store.hoon#L20-L30
+
+
+### Current State of Permissioning
+Please note that as it stands today, the current permissioning system is likely subject to change. In addition, it is by no means the only manner in which to set up permissionings. For many applications, writing a small and bespoke permissioning library may be suitable as an alternative to the `graph-push-hook` permissioning scheme which is what will be covered in the following examples.
+
+Also, please be aware that the current set of applications use a special type known as `vip-metadata`, which stands for “variation in permission” (not to be confused with VIP meaning “very important person”). It is extra metadata attached to a post that is available to the permissioning arms that is mainly used to specify whether reader comments are enabled or disabled. It is not necessary in order to use %graph-store yourself. Here’s the source if you want to explore: https://github.com/urbit/urbit/blob/ac096d85ae847fcfe8786b51039c92c69abc006e/pkg/arvo/sur/metadata-store.hoon#L20-L30
 
 Anyways, let’s get started.
 
