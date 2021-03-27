@@ -3,7 +3,7 @@
 Graph store is a non-relational database suitable for use in building social media applications. You should use it if you will be primarily storing text-based content, and your underlying data has threading and nesting (generally, akin to a network). It is not (yet) suitable for binary data, and would probably not be a good fit for storing highly structured data as in a traditional relational database.
 
 <p align="center">
-![](images/image1.png)
+	<img src="images/image1.png"/>
 </p>
   
 Graph store is mainly in charge of two things: facilitating data ingress/egress, and validating data against a schema. There are two related tools: Graph Push Hook, which provides permissioning support to graph-store and acts as a proxy layer to graph-store for outside ships to access, and Graph Pull Hook, which can be used to request graph store data from other ships. Importantly, graph store proper doesn't know anything about the permissions, and acts purely in a trusted manner (i.e. assuming all inputs are trusted). This is why Graph Push Hook exists: to mediate untrusted requests from outside ships to your graph store, rejecting invalid ones where a ship shouldn’t be able to modify the data.
@@ -11,7 +11,9 @@ Graph store is mainly in charge of two things: facilitating data ingress/egress,
 ## Graph Store overview
 ### Posts
 
-![](images/image9.png)
+<p align="center">
+	<img src="images/image9.png"/>
+</p>
 
 Above, we can see a representation of a post on the left, along with its table form on  the right.
 The post is the most basic building block of a graph. 
@@ -32,9 +34,13 @@ This is similar to how traditional databases provide multiple different data typ
 
 ### Graphs and Nodes
 
-![](images/image11.png)
+<p align="center">
+	<img src="images/image11.png"/>
+</p>
 
-![](images/image12.png)
+<p align="center">
+	<img src="images/image12.png"/>
+</p>
 
 A graph is a flat, ordered map of nodes, where each node can have a child graph, which is itself a flat ordered map of nodes. Nodes contain a post and a child graph, although both are optional. In the above diagram, we can see an example of a basic graph on the top, along with the underlying structure of the data in table form underneath.
 
@@ -50,7 +56,7 @@ A few vocab terms:
 ### Index
 
 <p align="center">
-![](images/image5.png)
+	<img src="images/image5.png"/>
 </p>
 
 Indexes are a way of uniquely identifying a node within a graph. You can think of `index`es as similar to file paths, although they aren’t exactly the same. Roughly, a file path is a unique reference to a file or folder located in the filesystem. Similarly, an index is a unique reference to a node nested within a graph. The written syntax for a full index is very similar to file paths. It consists of every index fragment in order separated by a slash. A node’s level of nesting refers to how deeply it is nested within the context of the root graph. The level of nesting directly corresponds to the number of items in the index. An index fragment is the atom by which a node is uniquely identified within it’s graph, and roughly corresponds to a specific name of a directory along a path. In the diagrams that follow, we’ll use the index fragment instead of the index to avoid repeating redundant information, but please note that internally graph-store uses the full index at every node.
