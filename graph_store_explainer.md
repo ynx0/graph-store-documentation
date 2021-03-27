@@ -227,7 +227,8 @@ The parts of a `post` that are actually hashed to obtain a value of type the ear
 
 
 ## Graph Store
-Here’s sur/graph-store.hoon.
+
+Here’s `sur/graph-store.hoon`
 
 ```
 +$  graph         ((mop atom node) gth)
@@ -333,17 +334,16 @@ Here’s sur/graph-store.hoon.
 `graph` is a `mop` (ordered map) whose keys are `atom`s representing a node’s index fragment and whose values are `node`s, where entries are sorted by largest valued keys first (defined using the reference to the `gth` greater-than function). This is the fundamental data structure used in `%graph-store` that models a graph, a loosely interconnected set of data which can reference each other and be arbitrarily nested and interconnected.
 
 Here are some helpful wikipedia pages for more info on what this data type represents:
-https://en.wikipedia.org/wiki/Graph_(abstract_data_type)
-https://en.wikipedia.org/wiki/Graph_database#Background
+- https://en.wikipedia.org/wiki/Graph_(abstract_data_type)
+- https://en.wikipedia.org/wiki/Graph_database#Background
 
-`node` represents a pair of a `post` and all of its children, which is an `internal-graph`
-`internal-graph` is a tagged union representing the state that children can be in. Either a `node` has children in the form of a `graph`, or does not have any and is labeled as `%empty`. 
 
-`marked-graph` is the pair of a `graph` and an optionally present `mark`, which is used by %graph-store to validate a graph against the provided validator (recall that validators are marks).
+- `node` represents a pair of a `post` and all of its children, which is an `internal-graph`
+- `internal-graph` is a tagged union representing the state that children can be in. Either a `node` has children in the form of a `graph`, or does not have any and is labeled as `%empty`. 
+- `marked-graph` is the pair of a `graph` and an optionally present `mark`, which is used by %graph-store to validate a graph against the provided validator (recall that validators are marks).
+- `graphs` is a mapping between `resource`s and`marked-graph`s
+- `network` is the highest level data structure used by the %graph-store gall agent to represent all the information that the agent is aware of.
 
-`graphs` is a mapping between `resource`s and`marked-graph`s
-
-`network` is the highest level data structure used by the %graph-store gall agent to represent all the information that the agent is aware of.
 
 **Tag Queries**
 
