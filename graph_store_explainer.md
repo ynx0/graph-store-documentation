@@ -73,7 +73,9 @@ However, there is no strict requirement for them to be numbers; they can be stri
 
 ### Structural Nodes vs. Content-Centric Nodes
 
-![](images/image7.png)
+<p align="center">
+	<img src="images/image7.png"/>
+</p>
 
 When using graph-store, there is a notion of **structural nodes** vs. **content-centric nodes**. In the example diagram, we’ve color coded the different nodes based on what type of node they are. **Content-centric nodes** represent data created or consumed directly by the user. **Structural nodes**, on the other hand do not directly represent user data, and instead represent a higher level relationship between different user data. Structural nodes are used to implement the structure of the schema that is being implemented. In other words, they exist primarily for plumbing purposes.
 
@@ -458,7 +460,9 @@ Anyways, let’s get started.
 #### Schema
 Here’s what the schema of chat looks like:
 
-![](images/image10.png)
+<p align="center">
+	<img src="images/image10.png"/>
+</p>
 
 A chat is a flat graph, where all chat messages are nodes appended to the root of the graph. The graph represents a chat channel and contains all chat messages in order, while a chat message is a child node of the root graph.
 
@@ -490,7 +494,9 @@ Since the schema of the chat application is simple enough, it has no need for st
 
 #### Permissioning
 
-![](images/image8.png)
+<p align="center">
+	<img src="images/image8.png"/>
+</p>
 
 Let’s take a look at the permissions table in the diagram.
 
@@ -550,7 +556,9 @@ We can see that not a lot is going on in this example. Just a simple switch stat
 ### Links
 #### Schema
 
-![](images/image3.png)
+<p align="center">
+	<img src="images/image3.png"/>
+</p>
 
 The root graph represents the whole links collection. Every link entry is a child node of this graph. Every link entry is made up of:
 - The link and its description
@@ -603,8 +611,13 @@ It is important to note that you cannot directly edit the url or link afterwards
 
 #### Permissioning
 
-![](images/image14.png)
-![](images/image4.png)
+<p align="center">
+	<img src="images/image14.png"/>
+</p>
+
+<p align="center">
+	<img src="images/image4.png"/>
+</p>
 
 Let’s analyze the permissions structure.
 TODO stubbed out section
@@ -673,7 +686,9 @@ We can see that not a lot is going on in this example. Just a simple switch stat
 
 #### Schema
 
-![](images/image6.png)
+<p align="center">
+	<img src="images/image6.png"/>
+</p>
 
 Here, a notebook, which is a collection of blog posts (called notes), is represented by the root graph. All data associated with the blog post is represented by the top level node, which is the note itself along with the associated comments. One level deeper, we see two container structures. The first one is the post revision container; it holds the edit history of your blog post. Every child node of this corresponds to the actual title and text of your blog post. The second one is the comments container. This represents the comment section of your blog post. Every child node of this is not a comment, but a comment revision container, which, as before, contains the edit history of your comment.
 
@@ -748,9 +763,13 @@ Notably, the revision container for the blog post itself allows the post to be e
 
 #### Permissioning
 
-![](images/image2.png)
+<p align="center">
+	<img src="images/image2.png"/>
+</p>
 
-![](images/image13.png)
+<p align="center">
+	<img src="images/image13.png"/>
+</p>
 
 Let’s take a look at the permissioning structure for Publish. 
 
