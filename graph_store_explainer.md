@@ -102,25 +102,6 @@ There are also three different levels of access a given permission level can hav
 - %self - user has add or remove privileges for child nodes only if they authored the parent node (determined by `author` of post, i.e., they are the author of the post)
 
 
-Permissions for a given node usually come to mimic a table structure as follows:
-
-
-Permissions for some specific node in the schema
-Admin
-Writer
-Reader
-Add privileges
-%yes/%no/%self
-%yes/%no/%self
-%yes/%no/%self
-Remove privileges
-
-
-%yes/%no/%self
-%yes/%no/%self
-%yes/%no/%self
-
-
 ***
 
 We’ll be taking a look at the validators for 3 of the apps in Landscape built with Graph Store: Chat, Links, and Publish. Before we do that, let’s look at some of the concrete types that graph-store uses.
