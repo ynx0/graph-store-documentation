@@ -529,9 +529,9 @@ In line A, we accept an `indexed-post` that is used in the rest of the `grow` ar
 3. If the index is nested one level deep
 4. Return a `permissions` noun defined as: [admin: %yes, writer: %yes, reader: %no]
 
-<!-- todo  https://stackoverflow.com/questions/18088955/markdown-continue-numbered-list -->
 
-`graph-permissions-remove`
+    `graph-permissions-remove`
+
 5. Accept a noun `vip` of type vip-metadata
 6. Switch on the index, crashing if no successful matches occur
 7. If the index is nested one level deep
