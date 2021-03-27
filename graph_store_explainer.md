@@ -263,7 +263,7 @@ An `indexed-post` is a post with an associated index fragment that can be used t
 The parts of a `post` that are actually hashed to obtain a value of type the earlier type `hash`.
 
 
-## Graph Store
+### Graph Store
 
 Here’s `sur/graph-store.hoon`
 
