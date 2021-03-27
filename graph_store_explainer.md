@@ -723,12 +723,15 @@ Here’s its validator
 
 Walkthrough
 
-1. Get the post as a noun
-1. Force cast to indexed post
-1. Switch on index of post, crashing (reject) if no matches found
 
-1.If the node is nested one level deep
-  a. Ensure that its contents are empty. The top level node is a structural node containing all of the post and associated data.
+<ol>
+  <li>Get the post as a noun</li>
+  <li>Force cast to indexed post</li>
+  <li>Switch on index of post, crashing (reject) if no matches found</li>
+  <li>If the node is nested one level deep
+    <ol type="a"><li>Ensure that its contents are empty. The top level node is a structural node containing all of the post and associated data.</li></ol>
+  </li>
+  
 1. If it is nested 2 levels deep and contains a 1 as it’s last index fragment
   a. Ensure that its contents are empty. This is a structural node for holding revisions to the blog post.
 1. If the node is nested three levels deep, and has a 1 as it’s second index fragment
