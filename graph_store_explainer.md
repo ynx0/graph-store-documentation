@@ -486,19 +486,20 @@ Since the schema of the chat application is simple enough, it has no need for st
 Let’s take a look at the permissions table in the diagram.
 
 Chat Message [@ ~]
-Add Privileges
-Admins and Writers have %yes add permissions for all nodes at the top level, meaning that they have the ability to post chat messages, even if they did not create the chat channel
-Readers have %no add privileges for any nodes at the root level, so they do not have the ability to post chat messages
-Remove Privileges
-Admins and Writers have %self remove privileges, meaning that they may only delete chat messages that they posted, not anyone else’s
-Readers have %no remove privileges for any nodes, meaning they cannot delete any chat messages
+- Add Privileges
+  - Admins and Writers have %yes add permissions for all nodes at the top level, meaning that they have the ability to post chat messages, even if they did not create the chat channel
+  - Readers have %no add privileges for any nodes at the root level, so they do not have the ability to post chat messages
+- Remove Privileges
+  - Admins and Writers have %self remove privileges, meaning that they may only delete chat messages that they posted, not anyone else’s
+  - Readers have %no remove privileges for any nodes, meaning they cannot delete any chat messages
 
 This follows our general intuition of how permissions for chat messages should be structured.
 For example, it wouldn’t make sense to give readers %self, because they do not have the ability to create nodes in the first place, so they will never be in a position to delete any nodes.
 
 Let’s see how this permissioning system is implemented in the validator code.
-Here is the `grow` arm of mar/validator/chat.hoon
 
+Here is the `grow` arm of mar/validator/chat.hoon
+```
 |_  i=indexed-post              :: A
 ++  grow
   |%
@@ -516,21 +517,23 @@ Here is the `grow` arm of mar/validator/chat.hoon
   ::
   --
 ::
-
+```
 
 In line A, we accept an `indexed-post` that is used in the rest of the `grow` arm.
 
 `graph-permissions-add`
-Accept a noun `vip` of type vip-metadata
-Switch on the index of the post found in `i`, crashing if no successful matches occur
-If the index is nested one level deep
-Return a `permissions` noun defined as: [admin: %yes, writer: %yes, reader: %no]
+1. Accept a noun `vip` of type vip-metadata
+2. Switch on the index of the post found in `i`, crashing if no successful matches occur
+3. If the index is nested one level deep
+4. Return a `permissions` noun defined as: [admin: %yes, writer: %yes, reader: %no]
+
+<!-- todo  https://stackoverflow.com/questions/18088955/markdown-continue-numbered-list -->
 
 `graph-permissions-remove`
-Accept a noun `vip` of type vip-metadata
-Switch on the index, crashing if no successful matches occur
-If the index is nested one level deep
-Return a `permissions` noun defined as: [admin: %self, writer: %self, reader: %no]
+5. Accept a noun `vip` of type vip-metadata
+6. Switch on the index, crashing if no successful matches occur
+7. If the index is nested one level deep
+8. Return a `permissions` noun defined as: [admin: %self, writer: %self, reader: %no]
 
 We can see that not a lot is going on in this example. Just a simple switch statement that matches cases based on the index of the post, and returns the `permissions` values based on the theory explained earlier.
 
@@ -538,12 +541,12 @@ We can see that not a lot is going on in this example. Just a simple switch stat
 ### Links
 #### Schema
 
-[![](images/image3.png)]{style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 624.00px; height: 590.67px;"}
-
+![](images/image3.png)
 
 The root graph represents the whole links collection. Every link entry is a child node of this graph. Every link entry is made up of:
-The link and its description
-A comments section
+- The link and its description
+- A comments section
+
 
 The comments section holds all individual comment nodes, but comments are not simple leaf nodes. An individual comment is actually a structural node that acts as a revision container, storing the comment’s full edit history by storing each edit as a child node. The frontend is responsible for properly displaying the latest revision of the comment.
 
@@ -577,28 +580,29 @@ Here's the validator, located at `mar/graph/validator/link.hoon`:
   --
 ```
 
-Get the post as a noun
-Force cast to indexed post
-Switch on index of post, crash if no match occurs
-If the node is nested one level deep, (if the index is made up of a single atom)
-Ensure that it is a cell that has two pieces of data, whose content types are text and url
-If the node is nested two levels deep
-Ensure that it is empty, this is the structural node for holding comment revisions; it should not contain any content
-If the node is nested three levels deep
-Ensure that it is a cell, this is a specific revision of a comment under a revision container
+1. Get the post as a noun
+1. Force cast to indexed post
+1. Switch on index of post, crash if no match occurs
+  a. If the node is nested one level deep, (if the index is made up of a single atom)
+  b. Ensure that it is a cell that has two pieces of data, whose content types are text and url
+  c. If the node is nested two levels deep
+  d. Ensure that it is empty, this is the structural node for holding comment revisions; it should not contain any content
+1. If the node is nested three levels deep
+  a. Ensure that it is a cell, this is a specific revision of a comment under a revision container
 
 It is important to note that you cannot directly edit the url or link afterwards, only the whole link entry itself. This is because you can only add or remove nodes to a graph, not modify them. Comments, however, can be “edited”. This is possible by using a technique called a revision container. Instead of having a single leaf node holding the comment text in its contents, a node with empty contents is created. All revisions of the comment are added as children to this note, and the frontend simply shows the most recent one only.
 
 #### Permissioning
 
-[![](images/image14.png)]{style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 624.00px; height: 668.00px;"}
-
-[![](images/image4.png)]{style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 624.00px; height: 782.67px;"}
+![](images/image14.png)
+![](images/image4.png)
 
 Let’s analyze the permissions structure.
 TODO stubbed out section
 
 Here’s how it is implemented:
+
+```
 |_  i=indexed-post
 ++  grow
   |%
@@ -624,33 +628,35 @@ Here’s how it is implemented:
       [@ @ @ ~]   [%yes %self %self]              :: 
     ==
   ::
-
+```
 
 `graph-permissions-add`
-Accept a noun `vip` of type vip-metadata
-Declare a variable `reader`, a flag which is true if reader comments are enabled, false otherwise
-Switch on the index of the post found in `i`, crashing if no successful matches occur
-If the index is nested one level deep, return a `permissions` noun defined as:
-Admin - %yes
-Writer - %yes
-Reader: %no
-If the index is nested two levels deep, return a `permissions` noun defined as:
-Admin - %yes
-Writer - %yes
-Reader: %yes if reader comments are enabled, else %no
-If the index is nested three levels deep, return a `permissions` noun defined as:
-Admin - %yes
-Writer - %yes
-Reader: %yes if reader comments are enabled, else %no
+1. Accept a noun `vip` of type vip-metadata
+  - Declare a variable `reader`, a flag which is true if reader comments are enabled, false
+otherwise
+1. Switch on the index of the post found in `i`, crashing if no successful matches occur
+1. If the index is nested one level deep, return a `permissions` noun defined as:
+  - Admin - %yes
+  - Writer - %yes
+  - Reader: %no
+1. If the index is nested two levels deep, return a `permissions` noun defined as:
+  - Admin - %yes
+  - Writer - %yes
+  - Reader: %yes if reader comments are enabled, else %no
+1. If the index is nested three levels deep, return a `permissions` noun defined as:
+  - Admin - %yes
+  - Writer - %yes
+  - Reader: %yes if reader comments are enabled, else %no
+
 
 `graph-permissions-remove`
-Accept a noun `vip` of type vip-metadata
-Declare a variable `reader`, a flag which is true if reader comments are enabled, false otherwise
-Switch on the index of the post found in `i`, crashing if no successful matches occur
-If the index is nested one level deep, two levels deep, or three levels deep, return a `permissions` noun defined as:
-Admin - %yes
-Writer - %self
-Reader: %self
+1. Accept a noun `vip` of type vip-metadata
+1. Declare a variable `reader`, a flag which is true if reader comments are enabled, false otherwise
+1. Switch on the index of the post found in `i`, crashing if no successful matches occur
+1. If the index is nested one level deep, two levels deep, or three levels deep, return a `permissions` noun defined as:
+  - Admin - %yes
+  - Writer - %self
+  - Reader: %self
 
 We can see that not a lot is going on in this example. Just a simple switch statement that matches cases based on the index of the post, and returns the `permissions` values based on the theory explained earlier.
 
@@ -658,7 +664,7 @@ We can see that not a lot is going on in this example. Just a simple switch stat
 
 #### Schema
 
-[![](images/image6.png)]{style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 624.00px; height: 658.67px;"}
+![](images/image6.png)
 
 Here, a notebook, which is a collection of blog posts (called notes), is represented by the root graph. All data associated with the blog post is represented by the top level node, which is the note itself along with the associated comments. One level deeper, we see two container structures. The first one is the post revision container; it holds the edit history of your blog post. Every child node of this corresponds to the actual title and text of your blog post. The second one is the comments container. This represents the comment section of your blog post. Every child node of this is not a comment, but a comment revision container, which, as before, contains the edit history of your comment.
 
@@ -702,8 +708,10 @@ Here’s its validator
       ip
     ==
   --
-Walkthrough
 ```
+
+Walkthrough
+
 Get the post as a noun
 Force cast to indexed post
 Switch on index of post, crashing (reject) if no matches found
@@ -728,11 +736,12 @@ Items 4-6 is for enforcing the schema for the post in general
 Items 7-9 is for enforcing the schema for comments specifically
 
 Notably, the revision container for the blog post itself allows the post to be edited, unlike the link entry in the previous example. In addition, in step six, the reason that the validator is made this way is because the first element of the contents is interpreted as the title of the post, and the rest of the elements are interpreted as the body of the post. Otherwise, the structure is unchanged from the Links example.
+
 #### Permissioning
 
-[![](images/image2.png)]{style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 449.00px; height: 546.67px;"}
+![](images/image2.png)
 
-[![](images/image13.png)]{style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 667.07px; height: 541.50px;"}
+![](images/image13.png)
 
 Let’s take a look at the permissioning structure for Publish. 
 
