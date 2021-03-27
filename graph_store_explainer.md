@@ -731,19 +731,24 @@ Walkthrough
   <li>If the node is nested one level deep
     <ol type="a"><li>Ensure that its contents are empty. The top level node is a structural node containing all of the post and associated data.</li></ol>
   </li>
-  
-1. If it is nested 2 levels deep and contains a 1 as it’s last index fragment
-  a. Ensure that its contents are empty. This is a structural node for holding revisions to the blog post.
-1. If the node is nested three levels deep, and has a 1 as it’s second index fragment
-  a. Ensure that its contents is a list of at least 2 elements
-  b. Ensure that the first element of contents has a content type of text
-
-1. If the node is nested two levels deep, and has a 2 as it’s last index fragment
-  a. Ensure that its contents are empty. This is a structural node for holding comments.
-1. If the node is nested three levels deep, and has a 2 as it’s second index fragment
-  a. Ensure that its contents are empty. This is a structural node for holding revisions of a specific comment.
-1. If the node is nested four levels deep, and has a 2 as it’s second index fragment
-  a. Ensure that contents has type `cell`. This is a specific revision of a comment
+  <li>If it is nested 2 levels deep and contains a 1 as it’s last index fragment
+    <ol type="a"><li>Ensure that its contents are empty. This is a structural node for holding revisions to the blog post.</li></ol>
+  </li>
+  <li>If the node is nested three levels deep, and has a 1 as it’s second index fragment
+    <ol type="a">
+      <li>Ensure that its contents is a list of at least 2 elements</li>
+      <li>Ensure that the first element of contents has a content type of text</li>
+    </ol>
+  </li>
+  <li>If the node is nested two levels deep, and has a 2 as it’s last index fragment
+    <ol type="a"><li>Ensure that its contents are empty. This is a structural node for holding comments.</li></ol>
+  </li>
+  <li>If the node is nested three levels deep, and has a 2 as it’s second index fragment
+    <ol type="a"><li>Ensure that its contents are empty. This is a structural node for holding revisions of a specific comment.</li></ol>
+  </li>
+  <li>If the node is nested four levels deep, and has a 2 as it’s second index fragment
+    <ol type="a"><li>Ensure that contents has type `cell`. This is a specific revision of a comment</li></ol>
+  </li>
 
 Items 1-3 are setting up the validator
 Items 4-6 are enforcing the schema for the post in general
