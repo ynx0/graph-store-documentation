@@ -712,28 +712,28 @@ Here’s its validator
 
 Walkthrough
 
-Get the post as a noun
-Force cast to indexed post
-Switch on index of post, crashing (reject) if no matches found
+1. Get the post as a noun
+1. Force cast to indexed post
+1. Switch on index of post, crashing (reject) if no matches found
 
-If the node is nested one level deep
-Ensure that its contents are empty. The top level node is a structural node containing all of the post and associated data.
-If it is nested 2 levels deep and contains a 1 as it’s last index fragment
-Ensure that its contents are empty. This is a structural node for holding revisions to the blog post.
-If the node is nested three levels deep, and has a 1 as it’s second index fragment
-Ensure that its contents is a list of at least 2 elements
-Ensure that the first element of contents has a content type of text
+1.If the node is nested one level deep
+  - Ensure that its contents are empty. The top level node is a structural node containing all of the post and associated data.
+1. If it is nested 2 levels deep and contains a 1 as it’s last index fragment
+  - Ensure that its contents are empty. This is a structural node for holding revisions to the blog post.
+1. If the node is nested three levels deep, and has a 1 as it’s second index fragment
+  - Ensure that its contents is a list of at least 2 elements
+  - Ensure that the first element of contents has a content type of text
 
-If the node is nested two levels deep, and has a 2 as it’s last index fragment
-Ensure that its contents are empty. This is a structural node for holding comments.
-If the node is nested three levels deep, and has a 2 as it’s second index fragment
-Ensure that its contents are empty. This is a structural node for holding revisions of a specific comment.
-If the node is nested four levels deep, and has a 2 as it’s second index fragment
-Ensure that contents has type `cell`. This is a specific revision of a comment
+1. If the node is nested two levels deep, and has a 2 as it’s last index fragment
+  - Ensure that its contents are empty. This is a structural node for holding comments.
+1. If the node is nested three levels deep, and has a 2 as it’s second index fragment
+  - Ensure that its contents are empty. This is a structural node for holding revisions of a specific comment.
+1. If the node is nested four levels deep, and has a 2 as it’s second index fragment
+  - Ensure that contents has type `cell`. This is a specific revision of a comment
 
-Items 1-3 is setup code
-Items 4-6 is for enforcing the schema for the post in general
-Items 7-9 is for enforcing the schema for comments specifically
+Items 1-3 are setting up the validator
+Items 4-6 are enforcing the schema for the post in general
+Items 7-9 are enforcing the schema for comments specifically
 
 Notably, the revision container for the blog post itself allows the post to be edited, unlike the link entry in the previous example. In addition, in step six, the reason that the validator is made this way is because the first element of the contents is interpreted as the title of the post, and the rest of the elements are interpreted as the body of the post. Otherwise, the structure is unchanged from the Links example.
 
@@ -773,32 +773,33 @@ TODO stubbed out section
 ```
 
 `graph-permissions-add`
-Accept a noun `vip` of type vip-metadata
-Switch on the index of the post found in `i`, crashing if no successful matches occur
-If the index is nested one level deep, return a `permissions` noun defined as:
-Admin - %yes
-Writer - %yes
-Reader: %no
-If the index is nested three levels deep and has a 1 as its 2nd index fragment, return a `permissions` noun defined as:
-Admin - %self
-Writer - %self
-Reader: %no
-If the index is nested three levels deep and has a 2 as its 2nd index fragment, return a `permissions` noun defined as:
-Admin - %yes
-Writer - %yes
-Reader: %yes if reader comments are enabled, else %no
-If the index is nested four levels deep and has a 2 as its 2nd index fragment, return a `permissions` noun defined as:
-Admin - %self
-Writer - %self
-Reader: %self
+1. Accept a noun `vip` of type vip-metadata
+1. Switch on the index of the post found in `i`, crashing if no successful matches occur
+1. If the index is nested one level deep, return a `permissions` noun defined as:
+  - Admin - %yes
+  - Writer - %yes
+  - Reader: %no
+1. If the index is nested three levels deep and has a 1 as its 2nd index fragment, return a `permissions` noun defined as:
+  - Admin - %self
+  - Writer - %self
+  - Reader: %no
+1. If the index is nested three levels deep and has a 2 as its 2nd index fragment, return a `permissions` noun defined as:
+  - Admin - %yes
+  - Writer - %yes
+  - Reader: %yes if reader comments are enabled, else %no
+1. If the index is nested four levels deep and has a 2 as its 2nd index fragment, return a `permissions` noun defined as:
+  - Admin - %self
+  - Writer - %self
+  - Reader: %self
+
 
 `graph-permissions-remove`
-Accept a noun `vip` of type vip-metadata
-Switch on the index of the post found in `i`, crashing if no successful matches occur
-If the index is nested: (a) one level deep, (b) four levels deep with a 1 as it’s 2nd index fragment, (c) three levels deep and has a 2 as its 2nd index fragment, or (d) nested four levels deep and has a 2 as its 2nd index fragment, return a `permissions` noun defined as:
-Admin - %yes
-Writer - %self
-Reader: %self
+1. Accept a noun `vip` of type vip-metadata
+1. Switch on the index of the post found in `i`, crashing if no successful matches occur
+1. If the index is nested: (a) one level deep, (b) four levels deep with a 1 as it’s 2nd index fragment, (c) three levels deep and has a 2 as its 2nd index fragment, or (d) nested four levels deep and has a 2 as its 2nd index fragment, return a `permissions` noun defined as:
+  - Admin - %yes
+  - Writer - %self
+  - Reader: %self
 
 ## Validators - General Patterns and Best Practices
 ### General Patterns
@@ -830,9 +831,9 @@ All graph store applications are going to have a mark, which are applied to data
 
 
 Code References
-https://github.com/urbit/urbit/blob/master/pkg/interface/src/logic/api/base.ts#L62
-https://github.com/urbit/urbit/blob/e2ad6e3e9219c8bfad62f27f05c7cac94c9effa8/pkg/arvo/mar/graph/update.hoon
-https://github.com/urbit/urbit/blob/ac096d85ae847fcfe8786b51039c92c69abc006e/pkg/arvo/sys/vane/eyre.hoon#L1617-L1625 shows how eyre applies marks
+- https://github.com/urbit/urbit/blob/master/pkg/interface/src/logic/api/base.ts#L62
+- https://github.com/urbit/urbit/blob/e2ad6e3e9219c8bfad62f27f05c7cac94c9effa8/pkg/arvo/mar/graph/update.hoon
+- https://github.com/urbit/urbit/blob/ac096d85ae847fcfe8786b51039c92c69abc006e/pkg/arvo/sys/vane/eyre.hoon#L1617-L1625 shows how eyre applies marks
 
 ## Advanced Info
 This section is not required but does shed light on some implicit assumptions that graph-store makes.
