@@ -1,5 +1,7 @@
 # Graph Store Explainer
 
+
+## Table of Contents
 - [Graph Store Explainer](#graph-store-explainer)
   * [Intro](#intro)
   * [Graph Store overview](#graph-store-overview)
