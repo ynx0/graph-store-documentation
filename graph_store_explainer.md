@@ -9,8 +9,7 @@ Graph store is mainly in charge of two things: facilitating data ingress/egress,
 ## Graph Store overview
 ### Posts
 
-[![](images/image9.png)]{style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 624.00px; height: 240.00px;"}
-
+![](images/image9.png)
 
 Above, we can see a representation of a post on the left, along with its table form on  the right.
 The post is the most basic building block of a graph. 
