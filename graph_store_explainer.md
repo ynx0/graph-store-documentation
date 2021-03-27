@@ -458,7 +458,6 @@ A chat is a flat graph, where all chat messages are nodes appended to the root o
 Here’s the definition of the schema in the chat validator mark:
 File: `mar/graph/validator/chat.hoon`
 ```
-
 ++  grab
   |%
   ++  noun
@@ -471,10 +470,10 @@ File: `mar/graph/validator/chat.hoon`
 ```
 
 Here are the steps:
-- Given a noun (we expect an indexed-post)
-- Try to coerce p to an indexed-post, crash if doesn’t cast
-- Assert that the index of the post of the indexed post is only a single atom, i.e., that it is only nested one level deep
-- Return the indexed post
+1. Given a noun (we expect an indexed-post)
+1. Try to coerce p to an indexed-post, crash if doesn’t cast
+1. Assert that the index of the post of the indexed post is only a single atom, i.e., that it is only nested one level deep
+1. Return the indexed post
 
 Notably, under this set of rules, there is no nesting allowed. Put another way, no node is allowed to have any children. Nodes can only be added to the root graph. Step 3 is what enforces the flat hierarchy. If someone were to manually try to submit a node with children, graph-store would reject it, preventing them from sending an invalid chat message.
 
