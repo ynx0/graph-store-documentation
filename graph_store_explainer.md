@@ -2,8 +2,7 @@
 ## Intro
 Graph store is a non-relational database suitable for use in building social media applications. You should use it if you will be primarily storing text-based content, and your underlying data has threading and nesting (generally, akin to a network). It is not (yet) suitable for binary data, and would probably not be a good fit for storing highly structured data as in a traditional relational database.
 
-[![](images/image1.png)]{style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 624.00px; height: 349.33px;"}
-
+![](images/image1.png)
 
 Graph store is mainly in charge of two things: facilitating data ingress/egress, and validating data against a schema. There are two related tools: Graph Push Hook, which provides permissioning support to graph-store and acts as a proxy layer to graph-store for outside ships to access, and Graph Pull Hook, which can be used to request graph store data from other ships. Importantly, graph store proper doesn't know anything about the permissions, and acts purely in a trusted manner (i.e. assuming all inputs are trusted). This is why Graph Push Hook exists: to mediate untrusted requests from outside ships to your graph store, rejecting invalid ones where a ship shouldn’t be able to modify the data.
 
@@ -32,70 +31,67 @@ This is similar to how traditional databases provide multiple different data typ
 
 ### Graphs and Nodes
 
-[![](images/image11.png)]{style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 569.50px; height: 426.67px;"}
+![](images/image11.png)
 
-[![](images/image12.png)]{style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 565.75px; height: 425.33px;"}
-
+![](images/image12.png)
 
 A graph is a flat, ordered map of nodes, where each node can have a child graph, which is itself a flat ordered map of nodes. Nodes contain a post and a child graph, although both are optional. In the above diagram, we can see an example of a basic graph on the top, along with the underlying structure of the data in table form underneath.
 
 A few vocab terms:
-Root graph refers to the outermost graph, G in this case
-Top level is a loose term usually used to refer to a node that exists in the root graph. A and B would be considered nodes at the top level, but B and all its descendants would not qualify.
-Sibling nodes are two nodes that reside next to each other, meaning that they reside in the same `graph`. A and D are an example of sibling nodes.
-We say a node is a child of another node if it directly resides within the child graph of that node
-A node is a parent to another node if it directly contains the node within its children. An example is the relationship between B and C: C is a child of B, while B is the parent of C
-Another way of saying a node is a child is by saying that node B is nested within node A Strictly speaking, C is not a child of A, but we do say that A is an ancestor of C, while C is a descendant of A.
-Leaf nodes refer to nodes that do not have children. C and D are both examples of this
+- **Root graph** refers to the outermost graph, G in this case
+- **Top level** is a loose term usually used to refer to a node that exists in the root graph. **A** and **B** would be considered nodes at the top level, but **B** and all its descendants would not qualify.
+- **Sibling nodes** are two nodes that reside next to each other, meaning that they reside in the same `graph`. **A** and **D** are an example of sibling nodes.
+- We say a node is a **child** of another node if it directly resides within the child graph of that node
+- A node is a **parent** to another node if it directly contains the node within its children. An example is the relationship between **B** and **C**: **C** is a child of **B**, while **B** is the parent of **C**
+- Another way of saying a node is a child is by saying that node **B** is nested within node **A** Strictly speaking, **C** is not a child of **A**, but we do say that **A** is an **ancestor** of **C**, while **C** is a **descendant** of **A**.
+- **Leaf nodes** refer to nodes that do not have children. **C** and **D** are both examples of leaf nodes
 
 ### Index
 
-[![](images/image5.png)]{style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 537.83px; height: 528.00px;"}
+![](images/image5.png)
 
 Indexes are a way of uniquely identifying a node within a graph. You can think of `index`es as similar to file paths, although they aren’t exactly the same. Roughly, a file path is a unique reference to a file or folder located in the filesystem. Similarly, an index is a unique reference to a node nested within a graph. The written syntax for a full index is very similar to file paths. It consists of every index fragment in order separated by a slash. A node’s level of nesting refers to how deeply it is nested within the context of the root graph. The level of nesting directly corresponds to the number of items in the index. An index fragment is the atom by which a node is uniquely identified within it’s graph, and roughly corresponds to a specific name of a directory along a path. In the diagrams that follow, we’ll use the index fragment instead of the index to avoid repeating redundant information, but please note that internally graph-store uses the full index at every node.
 
-In the above diagram, we would say that nodes A and B are nested 1 level deep, while B would be at the 2nd level of nesting, and C would be nested 3 levels deep.
+In the above diagram, we would say that nodes **A** and **B** are nested 1 level deep, while **B** would be at the 2nd level of nesting, and **C** would be nested 3 levels deep.
 
 As seen above, indexes are usually numbers. Most commonly, they can represent:
-Date or time of posting
-A sequence of numbers starting from 1 increasing
-Structural/constant value: values which are associated with a specific meaning in the context of the schema of an application.
+- Date or time of posting
+- A sequence of numbers starting from 1 increasing
+- Structural/constant value: values which are associated with a specific meaning in the context of the schema of an application.
 
 However, there is no strict requirement for them to be numbers; they can be strings as well as other data types. As we’ll see in the later sections, it is up to the app developer to decide this when creating their application.
 
 
 ### Structural Nodes vs. Content-Centric Nodes
 
-[![](images/image7.png)]{style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 570.00px; height: 388.06px;"}
+![](images/image7.png)
 
-When using graph-store, there is a notion of structural nodes vs. content-centric nodes. In the example diagram, we’ve color coded the different nodes based on what type of node they are. Content-centric nodes represent data created or consumed directly by the user. Structural nodes, on the other hand do not directly represent user data, and instead represent a higher level relationship between different user data. Structural nodes are used to implement the structure of the schema that is being implemented. In other words, they exist primarily for plumbing purposes.
+When using graph-store, there is a notion of **structural nodes** vs. **content-centric nodes**. In the example diagram, we’ve color coded the different nodes based on what type of node they are. **Content-centric nodes** represent data created or consumed directly by the user. **Structural nodes**, on the other hand do not directly represent user data, and instead represent a higher level relationship between different user data. Structural nodes are used to implement the structure of the schema that is being implemented. In other words, they exist primarily for plumbing purposes.
 
 Note that this differentiation is purely human-facing, and not encoded anywhere within the actual system. Although these patterns aren’t hard or fast rules, we’ll see how they are used in practice in the validator walkthrough section.
 
 ## Validator Overview - Schema and Permissions
 
+Every social application has a minimum amount of information it needs to function along with the structure that the information must follow. We’ll call this the application’s schema. This is enforced by a **validator**. A validator's primary function is to encode the constraints of the schema and validate data against the schema of your social media app. Graph Store uses the Hoon type system, specifically marks, to actually represent validators. Validators are a special case of a `mark`, and so the terms may be used interchangeably.
 
-Every social application has a minimum amount of information it needs to function along with the structure that the information must follow. We’ll call this the application’s schema. One of the responsibilities of a validator is to encode these constraints and validate data against the schema of your social media app. Graph Store uses the Hoon type system, specifically marks, to actually represent validators. Validators are a special case of a mark, and so the terms may be used interchangeably.
-
-In addition, validators can also encode structural permissions. Structural permissions govern who is allowed to add or remove a given node (and by extension its children) based on the node’s properties (usually it’s depth in the graph).
+In addition, validators can also encode structural permissions. **Structural permissions** govern who is allowed to add or remove a given node (and by extension its children) based on the node’s properties (usually it’s depth in the graph).
 
 There are 3 different classes of users:
-Admin - An owner of a resource or someone who’s been delegated the same privileges
-Writer - Someone who can create and modify their own content but cannot modify others’
-Reader - Someone who is only given permission to access but not create or modify, except in special cases (such as comments on a post)
+- Admin - An owner of a resource or someone who’s been delegated the same privileges
+- Writer - Someone who can create and modify their own content but cannot modify others’
+- Reader - Someone who is only given permission to access but not create or modify, except in special cases (such as comments on a post)
 
 There are two different types of privileges:
-Add privileges - permission to add (read: create) a given node and add to its children
-Remove privileges - permission to remove a given node and remove its children
+- Add privileges - permission to add (read: create) a given node and add to its children
+- Remove privileges - permission to remove a given node and remove its children
 
 There are also three different levels of access a given permission level can have:
-%no - user does not have add or remove privileges for this node
-%yes - user has add or remove privileges for this node, whether or not they authored the parent node
-%self - user has add or remove privileges for child nodes only if they authored the parent node (determined by `author` of post, i.e., they are the author of the post)
+- %no - user does not have add or remove privileges for this node
+- %yes - user has add or remove privileges for this node, whether or not they authored the parent node
+- %self - user has add or remove privileges for child nodes only if they authored the parent node (determined by `author` of post, i.e., they are the author of the post)
 
 
 Permissions for a given node usually come to mimic a table structure as follows:
-
 
 
 Permissions for some specific node in the schema
@@ -115,6 +111,7 @@ Remove privileges
 
 
 ***
+
 We’ll be taking a look at the validators for 3 of the apps in Landscape built with Graph Store: Chat, Links, and Publish. Before we do that, let’s look at some of the concrete types that graph-store uses.
 
 
@@ -161,9 +158,6 @@ Here’s sur/post.hoon.
       ::[%cage =cage]
   ==
 ```
-
-
-
 
 
 **Index**
@@ -230,7 +224,8 @@ As we’ve seen before, post is one of the more important types. It is the basic
 
 An `indexed-post` is a post with an associated index fragment that can be used to validate a post’s index with an index fragment that is expected at the end of the index list.
 
-Hashing (Part 2) 
+**Hashing (Part 2)**
+```
 +$  validated-portion
   $:  parent-hash=(unit hash)
       author=ship
@@ -238,12 +233,15 @@ Hashing (Part 2)
       contents=(list content)
   ==
 ::
+```
 
 The parts of a `post` that are actually hashed to obtain a value of type the earlier type `hash`.
+
 
 ## Graph Store
 Here’s sur/graph-store.hoon.
 
+```
 +$  graph         ((mop atom node) gth)
 +$  marked-graph  [p=graph q=(unit mark)]
 ::
@@ -317,9 +315,10 @@ Here’s sur/graph-store.hoon.
 ::    %yes: May add a node or remove node
 +$  permission-level
   ?(%no %self %yes)
+```
 
-
-Graph, Node, and Related Objects
+**Graph, Node, and Related Objects**
+```
 +$  graph         ((mop atom node) gth)
 +$  marked-graph  [p=graph q=(unit mark)]
 ::
@@ -341,6 +340,7 @@ Graph, Node, and Related Objects
       validators=(set mark)
   ==
 ::
+```
 
 `graph` is a `mop` (ordered map) whose keys are `atom`s representing a node’s index fragment and whose values are `node`s, where entries are sorted by largest valued keys first (defined using the reference to the `gth` greater-than function). This is the fundamental data structure used in `%graph-store` that models a graph, a loosely interconnected set of data which can reference each other and be arbitrarily nested and interconnected.
 
@@ -357,11 +357,16 @@ https://en.wikipedia.org/wiki/Graph_database#Background
 
 `network` is the highest level data structure used by the %graph-store gall agent to represent all the information that the agent is aware of.
 
-Tag Queries
+**Tag Queries**
+
+```
 +$  tag-queries   (jug term resource)
+```
 
 `tag-queries` is a mapping where the keys are terms and the values are a set of resources. It is a simple tagging system that allows for various ad-hoc collections, similar to filesystem tags being used to sort different files/folders. Although it is implemented in graph-store and fully functional, it is currently unused by graph-store itself or any existing applications. While the type’s name is `tag-queries`, there is no complex querying system as of now. Currently, you can add term/resources pairs into the tag queries, get a list of all terms in tag-queries, and get the whole jug out of %graph-store.
-Update (Part 1)
+
+**Update (Part 1)**
+```
 +$  update
   $%  [%0 p=time q=update-0]
   ==
@@ -392,12 +397,14 @@ Update (Part 1)
       [%tag-queries =tag-queries]
   ==
 --
-
+```
 
 The `update` type is what is used to interact with graph-store. It is used both to update subscribers with data (outgoing data) and to write to graph-store itself (incoming data). The first 6 actions are sent as pokes to graph-store in the form of a `graph-update`, which is an alias for `update` above. All actions defined here allow you to create/read/update/delete various objects in a running `graph-store` agent. An `update-0`encapsulates all `logged-update-0` (i.e. any `logged-update-0` is an `update-0` but not necessarily the other way around). The last three actions are scries (essentially readonly requests). They allow you to ask %graph-store for its current state regarding the three entries.
 
 If you want to check out a relevant code listing to see how graph store handles these pokes, see https://github.com/urbit/urbit/blob/e2ad6e3e9219c8bfad62f27f05c7cac94c9effa8/pkg/arvo/app/graph-store.hoon#L221-L227
-Update (Part 2)
+
+**Update (Part 2)**
+```
 +$  update-log    ((mop time logged-update) gth)
 +$  update-logs   (map resource update-log)
 ::
@@ -405,13 +412,16 @@ Update (Part 2)
   $%  [%0 p=time q=logged-update-0]
   ==
 ::
+```
 
 `update-log` is an ordered map where the keys are a timestamp (time is an alias for @da, an absolute datetime) and the values are `logged-update`s, where entries are sorted with the most recent timestamp first. It represents a history of updates applied to a graph. `update-logs` is a mapping where keys are resources and values are `update-log`s. This is the data structure used by %graph-store to store the history of actions associated with all graphs that it knows about, where each graph has a unique resource that identifies it. A logged-update is a data structure that holds any logged-update-0 along with a time identifying when the update happened. It follows a versioning pattern similar to the versioned state of a %gall agent.
 
 Similar to the urbit event log, graph store also stores all updates that are performed to it, so that it can rebuild its current state on demand. The current state of the database is more of a product of the event log, like a checkpoint, or a materialized db view, rather than the source of truth, which is really in the logged update. As a result, the graph-store database becomes immutable in nature, where all data is preserved and deleted data is only inaccessible in the current view or checkpoint, and is still recoverable by replaying the log.
 
 The reason for having the main CRUD actions being logged-updates is so that graph-store knows which order to process the log entries in when it is rebuilding its current state. The time  associated with the logged update is a way of specifying the canonical order to process the graph-update operations. All other actions that aren’t part of logged-update stand on their own and don’t need a timestamp in order to properly apply them.
-Permissions
+
+**Permissions**
+```
 +$  permissions  
   [admin=permission-level writer=permission-level reader=permission-level]
 ::
@@ -423,11 +433,12 @@ Permissions
 ::    %yes: May add a node or remove node
 +$  permission-level
   ?(%no %self %yes)
-
+```
 
 These are the types from the permissioning system explained earlier. Notably, `permissions` is just a length-3 cell of `permissions-level`s for admin, writer, and reader respectively, which mimics the table-like format mentioned earlier.
 
 Now that you have an understanding of the `sur` files, we can take a look at some existing graph-store apps and their validators.
+
 ## Validator Walkthrough - Schema and Permissioning Implementation
 A brief note: the current set of applications use a special type known as `vip-metadata`, which stands for “variation in permission” (not to be confused with VIP meaning “very important person”). It is extra metadata attached to a post that is available to the permissioning arms that is mainly used to specify whether reader comments are enabled or disabled. It is not necessary in order to use %graph-store yourself. Here’s the source if you want to explore: https://github.com/urbit/urbit/blob/ac096d85ae847fcfe8786b51039c92c69abc006e/pkg/arvo/sur/metadata-store.hoon#L20-L30
 
@@ -438,15 +449,15 @@ Anyways, let’s get started.
 #### Schema
 Here’s what the schema of chat looks like:
 
-[![](images/image10.png)]{style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 599.50px; height: 495.74px;"}
-
+![](images/image10.png)
 
 A chat is a flat graph, where all chat messages are nodes appended to the root of the graph. The graph represents a chat channel and contains all chat messages in order, while a chat message is a child node of the root graph.
 
 
 Here’s the definition of the schema in the chat validator mark:
+File: `mar/graph/validator/chat.hoon`
+```
 
-:: file: mar/graph/validator/chat.hoon
 ++  grab
   |%
   ++  noun
@@ -456,21 +467,21 @@ Here’s the definition of the schema in the chat validator mark:
     ip                          :: 4
   --
 ::
-
+```
 
 Here are the steps:
-Given a noun (we expect an indexed-post)
-Try to coerce p to an indexed-post, crash if doesn’t cast
-Assert that the index of the post of the indexed post is only a single atom, i.e., that it is only nested one level deep
-Return the indexed post
+- Given a noun (we expect an indexed-post)
+- Try to coerce p to an indexed-post, crash if doesn’t cast
+- Assert that the index of the post of the indexed post is only a single atom, i.e., that it is only nested one level deep
+- Return the indexed post
 
 Notably, under this set of rules, there is no nesting allowed. Put another way, no node is allowed to have any children. Nodes can only be added to the root graph. Step 3 is what enforces the flat hierarchy. If someone were to manually try to submit a node with children, graph-store would reject it, preventing them from sending an invalid chat message.
 
 Since the schema of the chat application is simple enough, it has no need for structural nodes at all.
+
 #### Permissioning
 
-[![](images/image8.png)]{style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 541.00px; height: 446.67px;"}
-
+![](images/image8.png)
 
 Let’s take a look at the permissions table in the diagram.
 
