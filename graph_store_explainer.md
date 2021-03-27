@@ -644,7 +644,8 @@ It is important to note that you cannot directly edit the url or link afterwards
 </p>
 
 Let’s analyze the permissions structure.
-TODO stubbed out section
+
+**TODO** *stubbed out awaiting potential changes in source*
 
 Here’s how it is implemented:
 
@@ -826,7 +827,7 @@ Notably, the revision container for the blog post itself allows the post to be e
 
 Let’s take a look at the permissioning structure for Publish. 
 
-TODO stubbed out section
+**TODO** *stubbed out awaiting potential changes in source*
 
 ```
 |_  i=indexed-post
