@@ -1,6 +1,6 @@
 # graph-store-documentation
 
-## [Start Here](graph_store_documentation.md)
+## [Start Here](graph_store_explainer.md)
 
 
 This repository contains documentation relating to Graph Store. It is still being actively worked on, especially as graph-store and the code surrounding it are also evolving.
