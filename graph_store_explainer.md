@@ -1,4 +1,39 @@
 # Graph Store Explainer
+
+- [Graph Store Explainer](#graph-store-explainer)
+  * [Intro](#intro)
+  * [Graph Store overview](#graph-store-overview)
+    + [Posts](#posts)
+    + [Graphs and Nodes](#graphs-and-nodes)
+    + [Index](#index)
+    + [Structural Nodes vs. Content-Centric Nodes](#structural-nodes-vs-content-centric-nodes)
+  * [Validator Overview - Schema and Permissions](#validator-overview---schema-and-permissions)
+  * [Sur File Walkthrough](#sur-file-walkthrough)
+    + [Post](#post)
+  * [Graph Store](#graph-store)
+  * [Validator Walkthrough - Schema and Permissioning Implementation](#validator-walkthrough---schema-and-permissioning-implementation)
+    + [Current State of Permissioning](#current-state-of-permissioning)
+    + [Chat](#chat)
+      - [Schema](#schema)
+      - [Permissioning](#permissioning)
+    + [Links](#links)
+      - [Schema](#schema-1)
+      - [Permissioning](#permissioning-1)
+    + [Publish](#publish)
+      - [Schema](#schema-2)
+      - [Permissioning](#permissioning-2)
+  * [Validators - General Patterns and Best Practices](#validators---general-patterns-and-best-practices)
+    + [General Patterns](#general-patterns)
+      - [Schemas](#schemas)
+      - [Permissions](#permissions)
+    + [Earth/Mars Interface Details](#earth-mars-interface-details)
+  * [Advanced Info](#advanced-info)
+    + [Misc. Important Notes](#misc-important-notes)
+    + [What happens when you add or remove a node?](#what-happens-when-you-add-or-remove-a-node-)
+    + [Permissions internals](#permissions-internals)
+
+
+
 ## Intro
 Graph store is a non-relational database suitable for use in building social media applications. You should use it if you will be primarily storing text-based content, and your underlying data has threading and nesting (generally, akin to a network). It is not (yet) suitable for binary data, and would probably not be a good fit for storing highly structured data as in a traditional relational database.
 
