@@ -185,13 +185,14 @@ These types are used to cryptographically sign a given post, so that the host of
 ```
 
 `content` basically enumerates all the possible content types that a post can have. Again for convenience, the possible content types can be:
-Text - representing plain text
-Url - specific data type for urls
-Mention - mentioning another ship
-Code - a pair of a piece of code that was executed and it’s result (static data, no execution takes place inside of graph-store)
-Reference - a reference to another post
 
-Reference uses the `uid` type under the hood. Currently, these are the only content types supported by graph-store, although there is potential for dynamic content support in the form of a cage.
+- Text - representing plain text
+- Url - specific data type for urls
+- Mention - mentioning another ship
+- Code - a pair of a piece of code that was executed and it’s result (static data, no execution takes place inside of graph-store)
+- Reference - a reference to another post. Uses the `uid` type under the hood
+
+Currently, these are the only content types supported by graph-store, although there is potential for dynamic content support in the form of a cage.
 
 **Post**
 ```
