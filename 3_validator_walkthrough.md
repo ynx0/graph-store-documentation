@@ -25,7 +25,7 @@
 ### Current State of Permissioning
 Please note that as it stands today, the current permissioning system is likely subject to change. In addition, it is by no means the only manner in which to set up permissionings. For many applications, writing a small and bespoke permissioning library may be suitable as an alternative to the `graph-push-hook` permissioning scheme which is what will be covered in the following examples.
 
-Also, please be aware that the current set of applications use a special type known as `vip-metadata`, which stands for “variation in permission” (not to be confused with VIP meaning “very important person”). It is extra metadata attached to a post that is available to the permissioning arms that is mainly used to specify whether reader comments are enabled or disabled. It is not necessary in order to use %graph-store yourself. Here’s the source if you want to explore: https://github.com/urbit/urbit/blob/ac096d85ae847fcfe8786b51039c92c69abc006e/pkg/arvo/sur/metadata-store.hoon#L20-L30
+Also, please be aware that the current set of applications use a special type known as `vip-metadata`, which stands for “variation in permission” (not to be confused with VIP meaning “very important person”). It is extra metadata attached to a post that is available to the permissioning arms that is mainly used to specify whether reader comments are enabled or disabled. It is not necessary in order to use %graph-store yourself. Here’s the source if you want to explore: [`sur/metadata-store.hoon#L20-L30`](https://github.com/urbit/urbit/blob/ac096d85ae847fcfe8786b51039c92c69abc006e/pkg/arvo/sur/metadata-store.hoon#L20-L30)
 
 Anyways, let’s get started.
 
@@ -73,20 +73,20 @@ Since the schema of the chat application is simple enough, it has no need for st
 
 Let’s take a look at the permissions table in the diagram.
 
-Chat Message [@ ~]
+Chat Message `[@ ~]`
 - Add Privileges
-  - Admins and Writers have %yes add permissions for all nodes at the top level, meaning that they have the ability to post chat messages, even if they did not create the chat channel
-  - Readers have %no add privileges for any nodes at the root level, so they do not have the ability to post chat messages
+  - Admins and Writers have `%yes` add permissions for all nodes at the top level, meaning that they have the ability to post chat messages, even if they did not create the chat channel
+  - Readers have `%no` add privileges for any nodes at the root level, so they do not have the ability to post chat messages
 - Remove Privileges
   - Admins and Writers have %self remove privileges, meaning that they may only delete chat messages that they posted, not anyone else’s
-  - Readers have %no remove privileges for any nodes, meaning they cannot delete any chat messages
+  - Readers have `%no` remove privileges for any nodes, meaning they cannot delete any chat messages
 
 This follows our general intuition of how permissions for chat messages should be structured.
-For example, it wouldn’t make sense to give readers %self, because they do not have the ability to create nodes in the first place, so they will never be in a position to delete any nodes.
+For example, it wouldn’t make sense to give readers `%self`, because they do not have the ability to create nodes in the first place, so they will never be in a position to delete any nodes.
 
 Let’s see how this permissioning system is implemented in the validator code.
 
-Here is the `grow` arm of mar/validator/chat.hoon
+Here is the `grow` arm of `mar/validator/chat.hoon`
 ```
 |_  i=indexed-post              :: A
 ++  grow
@@ -288,40 +288,40 @@ Here, a notebook, which is a collection of blog posts (called notes), is represe
 Here’s its validator
 ```
   ++  noun
-    |=  p=*  :: 1
-    =/  ip  ;;(indexed-post p)  :: 2
-    ?+    index.p.ip  !!  :: 3
+    |=  p=*                            :: 1
+    =/  ip  ;;(indexed-post p)         :: 2
+    ?+    index.p.ip  !!               :: 3
     ::  top level post must have no content
-        [@ ~]  :: 4
-      ?>  ?=(~ contents.p.ip)  :: 4a
+        [@ ~]                          :: 4
+      ?>  ?=(~ contents.p.ip)          :: 4a
       ip
     ::  container for revisions
     ::
-        [@ %1 ~]   :: 5
-      ?>  ?=(~ contents.p.ip)  :: 5a
+        [@ %1 ~]                       :: 5
+      ?>  ?=(~ contents.p.ip)          :: 5a
       ip
     ::  specific revision
     ::  first content is the title
     ::  revisions are numbered by the revision count
     ::  starting at one
-        [@ %1 @ ~]  :: 6
-      ?>  ?=([* * *] contents.p.ip)  :: 6a
+        [@ %1 @ ~]                     :: 6
+      ?>  ?=([* * *] contents.p.ip)    :: 6a
       ?>  ?=(%text -.i.contents.p.ip)  :: 6b
       ip
     ::  container for comments
     ::
-        [@ %2 ~]  :: 7
-      ?>  ?=(~ contents.p.ip)  :: 7a
+        [@ %2 ~]                       :: 7
+      ?>  ?=(~ contents.p.ip)          :: 7a
       ip
     ::  container for comment revisions
     ::
-        [@ %2 @ ~]  :: 8
-      ?>  ?=(~ contents.p.ip)  :: 8a
+        [@ %2 @ ~]                     :: 8
+      ?>  ?=(~ contents.p.ip)          :: 8a
       ip
     ::  specific comment revision
     ::
-        [@ %2 @ @ ~]  :: 9
-      ?>  ?=(^ contents.p.ip)  :: 9a
+        [@ %2 @ @ ~]                   :: 9
+      ?>  ?=(^ contents.p.ip)          :: 9a
       ip
     ==
   --
@@ -384,21 +384,21 @@ Let’s take a look at the permissioning structure for Publish.
   |%
   ++  noun  i
   ++  graph-permissions-add
-    |=  vip=vip-metadata:met                         :: 1
-    ?+  index.p.i  !!                                :: 2
-      [@ ~]            [%yes %yes %no]  :: new note  :: 2a
-      [@ %1 @ ~]       [%self %self %no]             :: 2b
-      [@ %2 @ ~]       [%yes %yes ?:(?=(%reader-comments vip) %yes %no)]                                                :: 2c
-      [@ %2 @ @ ~]     [%self %self %self]           :: 2d
+    |=  vip=vip-metadata:met                                              :: 1
+    ?+  index.p.i  !!                                                     :: 2
+      [@ ~]            [%yes %yes %no]  :: new note                       :: 2a
+      [@ %1 @ ~]       [%self %self %no]                                  :: 2b
+      [@ %2 @ ~]       [%yes %yes ?:(?=(%reader-comments vip) %yes %no)]  :: 2c
+      [@ %2 @ @ ~]     [%self %self %self]                                :: 2d
     ==
   ::
   ++  graph-permissions-remove
-    |=  vip=vip-metadata:met                         :: 3
-    ?+  index.p.i  !!                                :: 4
-      [@ ~]            [%yes %self %self]            :: 4a
-      [@ %1 @ @ ~]     [%yes %self %self]            ::
-      [@ %2 @ ~]       [%yes %self %self]            :: 
-      [@ %2 @ @ ~]     [%yes %self %self]            :: 
+    |=  vip=vip-metadata:met                                              :: 3
+    ?+  index.p.i  !!                                                     :: 4
+      [@ ~]            [%yes %self %self]                                 :: 4a
+      [@ %1 @ @ ~]     [%yes %self %self]                                 ::
+      [@ %2 @ ~]       [%yes %self %self]                                 :: 
+      [@ %2 @ @ ~]     [%yes %self %self]                                 :: 
     ==
 ::
 ```
@@ -483,9 +483,9 @@ All graph store applications are going to have a mark, which are applied to data
 
 
 Code References
-- https://github.com/urbit/urbit/blob/master/pkg/interface/src/logic/api/base.ts#L62
-- https://github.com/urbit/urbit/blob/e2ad6e3e9219c8bfad62f27f05c7cac94c9effa8/pkg/arvo/mar/graph/update.hoon
-- https://github.com/urbit/urbit/blob/ac096d85ae847fcfe8786b51039c92c69abc006e/pkg/arvo/sys/vane/eyre.hoon#L1617-L1625 shows how eyre applies marks
+- [`interface/src/logic/api/base.ts#L62`](https://github.com/urbit/urbit/blob/master/pkg/interface/src/logic/api/base.ts#L62)
+- [`mar/graph/update.hoon`](https://github.com/urbit/urbit/blob/e2ad6e3e9219c8bfad62f27f05c7cac94c9effa8/pkg/arvo/mar/graph/update.hoon)
+- [`sys/vane/eyre.hoon#L1617-L1625`](https://github.com/urbit/urbit/blob/ac096d85ae847fcfe8786b51039c92c69abc006e/pkg/arvo/sys/vane/eyre.hoon#L1617-L1625) shows how eyre applies marks
 
 ## [Next](./4_advanced_info.md)
 ## [Home](./README.md)
