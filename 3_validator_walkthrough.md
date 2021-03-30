@@ -146,25 +146,25 @@ Here's the validator, located at `mar/graph/validator/link.hoon`:
 ++  grab
   |%
   ++  noun
-    |=  p=*  :: 1
-    =/  ip  ;;(indexed-post p)  :: 2
-    ?+    index.p.ip  ~|(index+index.p.ip !!)  :: 3
+    |=  p=*                                         :: 1
+    =/  ip  ;;(indexed-post p)                      :: 2
+    ?+    index.p.ip  ~|(index+index.p.ip !!)       :: 3
         ::  top-level link post; title and url
         ::
-        [@ ~]  :: 4
+        [@ ~]                                       :: 4
       ?>  ?=([[%text @] [%url @] ~] contents.p.ip)  :: 4a
       Ip
     ::
         ::  comment on link post; container structure
         ::
-        [@ @ ~]  :: 5
-      ?>  ?=(~ contents.p.ip)  :: 5a
+        [@ @ ~]                                     :: 5
+      ?>  ?=(~ contents.p.ip)                       :: 5a
       ip
     ::
         ::  comment on link post; comment text
         ::
-        [@ @ @ ~]  :: 6
-      ?>  ?=(^ contents.p.ip)  :: 6a
+        [@ @ @ ~]                                   :: 6
+      ?>  ?=(^ contents.p.ip)                       :: 6a
       ip
     ==
   --
