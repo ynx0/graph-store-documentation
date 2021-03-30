@@ -1,5 +1,5 @@
 
-# `sur` File Walthrough
+# `sur` File Walkthrough
 
 ## Table of Contents
   * [Sur File Walkthrough](#sur-file-walkthrough)
@@ -50,7 +50,7 @@ Here’s `sur/post.hoon`
 ```
 
 
-**Index**
+### Index
 ```
 +$  index       (list atom)
 +$  uid         [=resource =index]
@@ -62,7 +62,7 @@ Here’s `sur/post.hoon`
 
 An index fragment is not an explicitly defined type, but since an index is `(list atom)`, it follows that the type of an index fragment is `atom`. This is what gives the developer the flexibility to use more than just numbers in an index.
 
-**Hashing (Part 1)**
+### Hashing (Part 1)
 ```
 ::  +sham (half sha-256) hash of +validated-portion
 +$  hash  @ux
@@ -73,7 +73,7 @@ An index fragment is not an explicitly defined type, but since an index is `(lis
 
 These types are used to cryptographically sign a given post, so that the host of some content cannot impersonate the poster. The main one that needs explanation is `signature` which represents a triple of signed message of hash, author, and author’s life at time of posting. These can be used to cryptographically attest to a message. The implementation is a form of asymmetric/public-key encryption, where `q` and `r` are data necessary to look up a ship’s public key on azimuth, which can be used to verify the validity of the message.
 
-**Content Types**
+### Content Types
 ```
 +$  content
   $%  [%text text=cord]
@@ -97,7 +97,7 @@ These types are used to cryptographically sign a given post, so that the host of
 
 Currently, these are the only content types supported by graph-store, although there is potential for dynamic content support in the form of a cage.
 
-**Post**
+### Post
 ```
 +$  post
   $:  author=ship
@@ -115,7 +115,7 @@ As we’ve seen before, post is one of the more important types. It is the basic
 
 An `indexed-post` is a post with an associated index fragment that can be used to validate a post’s index with an index fragment that is expected at the end of the index list.
 
-**Hashing (Part 2)**
+### Hashing (Part 2)
 ```
 +$  validated-portion
   $:  parent-hash=(unit hash)
@@ -209,7 +209,7 @@ Here’s `sur/graph-store.hoon`
   ?(%no %self %yes)
 ```
 
-**Graph, Node, and Related Objects**
+### Graph, Node, and Related Objects
 ```
 +$  graph         ((mop atom node) gth)
 +$  marked-graph  [p=graph q=(unit mark)]
@@ -252,7 +252,7 @@ Here are some helpful wikipedia pages for more info on what this data type repre
 
 
 
-**Tag Queries**
+### Tag Queries
 
 ```
 +$  tag-queries   (jug term resource)
@@ -260,7 +260,7 @@ Here are some helpful wikipedia pages for more info on what this data type repre
 
 `tag-queries` is a mapping where the keys are terms and the values are a set of resources. It is a simple tagging system that allows for various ad-hoc collections, similar to filesystem tags being used to sort different files/folders. Although it is implemented in graph-store and fully functional, it is currently unused by Graph Store itself or any existing applications. While the type’s name is `tag-queries`, there is no complex querying system as of now. Currently, you can add term/resources pairs into the tag queries, get a list of all terms in tag-queries, and get the whole `jug` out of Graph Store.
 
-**Update (Part 1)**
+### Update (Part 1)
 ```
 +$  update
   $%  [%0 p=time q=update-0]
@@ -298,7 +298,7 @@ The `update` type is what is used to interact with graph-store. It is used both 
 
 If you want to check out a relevant code listing to see how graph store handles these pokes, see https://github.com/urbit/urbit/blob/e2ad6e3e9219c8bfad62f27f05c7cac94c9effa8/pkg/arvo/app/graph-store.hoon#L221-L227
 
-**Update (Part 2)**
+### Update (Part 2)
 ```
 +$  update-log    ((mop time logged-update) gth)
 +$  update-logs   (map resource update-log)
@@ -315,7 +315,7 @@ Similar to the urbit event log, Graph Store also stores all updates that are per
 
 The reason for having the main CRUD actions being logged-updates is so that graph-store knows which order to process the log entries in when it is rebuilding its current state. The time  associated with the logged update is a way of specifying the canonical order to process the graph-update operations. All other actions that aren’t part of logged-update stand on their own and don’t need a timestamp in order to properly apply them.
 
-**Permissions**
+### Permissions
 ```
 +$  permissions  
   [admin=permission-level writer=permission-level reader=permission-level]
