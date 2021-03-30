@@ -15,7 +15,7 @@
     + [General Patterns](#general-patterns)
       - [Schemas](#schemas)
       - [Permissions](#permissions)
-    + [Earth/Mars Interface Details](#earth-mars-interface-details)
+    + [Earth/Mars Interface Details](#earthmars-interface-details)
 
 
 
