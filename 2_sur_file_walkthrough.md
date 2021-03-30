@@ -304,7 +304,7 @@ Here are some helpful wikipedia pages for more info on what this data type repre
 
 The `update` type is what is used to interact with graph-store. It is used both to update subscribers with data (outgoing data) and to write to graph-store itself (incoming data). The first 6 actions are sent as pokes to graph-store in the form of a `graph-update`, which is an alias for `update` above. All actions defined here allow you to create/read/update/delete various objects in a running `graph-store` agent. An `update-0`encapsulates all `logged-update-0` (i.e. any `logged-update-0` is an `update-0` but not necessarily the other way around). The last three actions are scries (essentially readonly requests). They allow you to ask %graph-store for its current state regarding the three entries.
 
-If you want to check out a relevant code listing to see how graph store handles these pokes, see https://github.com/urbit/urbit/blob/e2ad6e3e9219c8bfad62f27f05c7cac94c9effa8/pkg/arvo/app/graph-store.hoon#L221-L227
+If you want to check out a relevant code listing to see how graph store handles these pokes, see [`app/graph-store.hoon#L221-L227`](https://github.com/urbit/urbit/blob/e2ad6e3e9219c8bfad62f27f05c7cac94c9effa8/pkg/arvo/app/graph-store.hoon#L221-L227)
 
 ### Update (Part 2)
 ```
@@ -317,7 +317,7 @@ If you want to check out a relevant code listing to see how graph store handles 
 ::
 ```
 
-`update-log` is an ordered map where the keys are a timestamp (time is an alias for @da, an absolute datetime) and the values are `logged-update`s, where entries are sorted with the most recent timestamp first. It represents a history of updates applied to a graph. `update-logs` is a mapping where keys are resources and values are `update-log`s. This is the data structure used by Graph Store to store the history of actions associated with all graphs that it knows about, where each graph has a unique resource that identifies it. A `logged-update` is a data structure that holds any `logged-update-0` along with a time identifying when the update happened. It follows a versioning pattern similar to the versioned state of a %gall agent.
+`update-log` is an ordered map where the keys are a timestamp (time is an alias for `@da`, an absolute datetime) and the values are `logged-update`s, where entries are sorted with the most recent timestamp first. It represents a history of updates applied to a graph. `update-logs` is a mapping where keys are resources and values are `update-log`s. This is the data structure used by Graph Store to store the history of actions associated with all graphs that it knows about, where each graph has a unique resource that identifies it. A `logged-update` is a data structure that holds any `logged-update-0` along with a time identifying when the update happened. It follows a versioning pattern similar to the versioned state of a %gall agent.
 
 Similar to the urbit event log, Graph Store also stores all updates that are performed to it, so that it can rebuild its current state on demand. The current state of the database is more of a product of the event log, like a checkpoint, or a materialized db view, rather than the source of truth, which is really in the logged update. As a result, the Graph Store database becomes immutable in nature, where all data is preserved and deleted data is only inaccessible in the current view or checkpoint, and is still recoverable by replaying the log.
 
