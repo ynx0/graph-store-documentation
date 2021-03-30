@@ -486,3 +486,6 @@ Code References
 - https://github.com/urbit/urbit/blob/master/pkg/interface/src/logic/api/base.ts#L62
 - https://github.com/urbit/urbit/blob/e2ad6e3e9219c8bfad62f27f05c7cac94c9effa8/pkg/arvo/mar/graph/update.hoon
 - https://github.com/urbit/urbit/blob/ac096d85ae847fcfe8786b51039c92c69abc006e/pkg/arvo/sys/vane/eyre.hoon#L1617-L1625 shows how eyre applies marks
+
+## [Next](./4_advanced_info.md)
+## [Home](./README.md)
