@@ -1,11 +1,19 @@
-
 # `sur` File Walkthrough
 
 ## Table of Contents
-  * [Sur File Walkthrough](#sur-file-walkthrough)
-      - [Post](#post)
-      - [Graph Store](#graph-store)
-
+- [`sur` File Walkthrough](#-sur--file-walkthrough)
+  * [Post](#post)
+    + [Index](#index)
+    + [Hashing (Part 1)](#hashing--part-1-)
+    + [Content Types](#content-types)
+    + [Post](#post-1)
+    + [Hashing (Part 2)](#hashing--part-2-)
+  * [Graph Store](#graph-store)
+    + [Graph, Node, and Related Objects](#graph--node--and-related-objects)
+    + [Tag Queries](#tag-queries)
+    + [Update (Part 1)](#update--part-1-)
+    + [Update (Part 2)](#update--part-2-)
+    + [Permissions](#permissions)
 
 We’ll be taking a look at the validators for 3 of the apps in Landscape built with Graph Store: Chat, Links, and Publish. To gain some clarity, let’s go through the type definitions of some of the most used types when working with Graph Store.
 
