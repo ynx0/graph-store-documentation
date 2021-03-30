@@ -2,7 +2,7 @@
 ## Table of Contents
   * [Advanced Info](#advanced-info)
     + [Misc. Important Notes](#misc-important-notes)
-    + [What happens when you add or remove a node?](#what-happens-when-you-add-or-remove-a-node-)
+    + [What happens when you add or remove a node?](#what-happens-when-you-add-or-remove-a-node)
     + [Permissions internals](#permissions-internals)
 
 
