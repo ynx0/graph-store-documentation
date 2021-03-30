@@ -116,5 +116,5 @@ There are also three different levels of access a given permission level can hav
 - **%self** - user has add or remove privileges for child nodes only if they authored the parent node (determined by `author` of post, i.e., they are the author of the post)
 
 
-
-
+## [Next](./2_sur_file_walkthrough.md)
+## [Home](./README.md)
