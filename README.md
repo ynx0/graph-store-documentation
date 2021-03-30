@@ -9,7 +9,7 @@ These docs cover the basics of Graph Store: its architecture, its data structure
 
 1. [Graph Store Overview](1_graph_store_overview.md)
   - Basic concepts and architectural overview
-2. [`sur` File Overview](2_sur_file_overview.md)
+2. [`sur` File Overview](2_sur_file_walkthrough.md)
   - Overview of data structures and concrete types used
 3. [Validator Walkthrough](3_validator_walkthrough.md)
   - Walkthrough of 3 existing applications using Graph Store
