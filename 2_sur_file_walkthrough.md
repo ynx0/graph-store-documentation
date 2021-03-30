@@ -333,3 +333,6 @@ These are the types from the permissioning system explained earlier. `permission
 
 ***
 Now that you have an understanding of the `sur` files, we can take a look at some existing graph-store apps and their validators.
+
+## [Next](./3_validator_walkthrough.md)
+## [Home](./README.md)
