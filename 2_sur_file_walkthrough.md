@@ -1,14 +1,15 @@
 
+# `sur` File Walthrough
+
 ## Table of Contents
   * [Sur File Walkthrough](#sur-file-walkthrough)
-  * [Post](#post)
-  * [Graph Store](#graph-store)
+      - [Post](#post)
+      - [Graph Store](#graph-store)
 
 
-## Sur File Walkthrough
 We’ll be taking a look at the validators for 3 of the apps in Landscape built with Graph Store: Chat, Links, and Publish. To gain some clarity, let’s go through the type definitions of some of the most used types when working with Graph Store.
 
-### Post
+## Post
 Here’s `sur/post.hoon`
 ```
 +$  index       (list atom)
@@ -128,7 +129,7 @@ An `indexed-post` is a post with an associated index fragment that can be used t
 The parts of a `post` that are actually hashed to obtain a value of type the earlier type `hash`.
 
 
-### Graph Store
+## Graph Store
 
 Here’s `sur/graph-store.hoon`
 
