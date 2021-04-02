@@ -60,7 +60,7 @@ A graph is a flat, ordered map of nodes, where each node can have a child graph,
 
 A few vocab terms:
 - **Root graph** refers to the outermost graph, G in this case
-- **Top level** is a loose term usually used to refer to a node that exists in the root graph. **A** and **B** would be considered nodes at the top level, but **B** and all its descendants would not qualify.
+- **Top level** is a loose term usually used to refer to a node that exists in the root graph. **A** and **D** would be considered nodes at the top level, but **B** and all its descendants would not qualify.
 - **Sibling nodes** are two nodes that reside next to each other, meaning that they reside in the same `graph`. **A** and **D** are an example of sibling nodes.
 - We say a node is a **child** of another node if it directly resides within the child graph of that node
 - A node is a **parent** to another node if it directly contains the node within its children. An example is the relationship between **B** and **C**: **C** is a child of **B**, while **B** is the parent of **C**
