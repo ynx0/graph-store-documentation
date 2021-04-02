@@ -102,7 +102,7 @@ Every social application has a minimum amount of information it needs to functio
 In addition, validators can also encode structural permissions. **Structural permissions** govern who is allowed to add or remove a given node (and by extension its children) based on the node’s properties (usually it’s depth in the graph).
 
 There are 3 different classes of users:
-- **Admin** - An owner of a resource or someone who’s been delegated the same privileges
+- **Admin** - An owner of a resource or someone who’s been delegated similar privileges
 - **Writer** - Someone who can create and modify their own content but cannot modify others’
 - **Reader** - Someone who is only given permission to access but not create or modify, except in special cases (such as comments on a post)
 
