@@ -15,10 +15,10 @@
     + [Update (Part 2)](#update-part-2)
     + [Permissions](#permissions)
 
-Let’s go through the type definitions of some of the most used types when working with Graph Store.
+Let's go through the type definitions of some of the most used types when working with Graph Store.
 
 ## Post
-Here’s `sur/post.hoon`
+Here's `sur/post.hoon`
 ```
 +$  index       (list atom)
 +$  uid         [=resource =index]
@@ -79,7 +79,7 @@ An index fragment is not an explicitly defined type, but since an index is `(lis
 +$  signatures  (set signature)
 ```
 
-These types are used to cryptographically sign a given post, so that the host of some content cannot act as an imposter, and post content impersonating as someone else. `signature` represents a triple of signed message of hash, author, and author’s life at time of posting. These can be used to cryptographically attest to a message. The implementation is a form of asymmetric/public-key encryption, where `q` and `r` are data necessary to look up a ship’s public key on azimuth, which can be used to verify the validity of the message.
+These types are used to cryptographically sign a given post, so that the host of some content cannot act as an imposter, and post content impersonating as someone else. `signature` represents a triple of signed message of hash, author, and author's life at time of posting. These can be used to cryptographically attest to a message. The implementation is a form of asymmetric/public-key encryption, where `q` and `r` are data necessary to look up a ship's public key on azimuth, which can be used to verify the validity of the message.
 
 ### Content Types
 ```
@@ -100,7 +100,7 @@ These types are used to cryptographically sign a given post, so that the host of
 - **Text** - representing plain text content
 - **Url** - specific data type for urls
 - **Mention** - mentioning another ship
-- **Code** - a pair of a piece of code that was executed and it’s result (static data, no execution takes place inside of Graph Store)
+- **Code** - a pair of a piece of code that was executed and it's result (static data, no execution takes place inside of Graph Store)
 - **Reference** - a reference to another post. Uses the `uid` type under the hood
 
 Currently, these are the only content types supported by graph-store, although there is potential for dynamic content support in the form of a `cage`.
@@ -121,7 +121,7 @@ Currently, these are the only content types supported by graph-store, although t
 
 Post is a fundamental type that represents what we normally think of as a post on social media. Most of the rest of the types are self-explanatory. `hash` is the optional hash of the post, and `signatures` is the (potentially empty) set of `signature`s if the post is cryptographically signed.
 
-An `indexed-post` is a post with an associated index fragment that can be used to validate a post’s index with an index fragment that is expected at the end of the index list.
+An `indexed-post` is a post with an associated index fragment that can be used to validate a post's index with an index fragment that is expected at the end of the index list.
 
 ### Hashing (Part 2)
 ```
@@ -139,7 +139,7 @@ The parts of a `post` that are actually hashed to obtain a value of type the ear
 
 ## Graph Store
 
-Here’s `sur/graph-store.hoon`
+Here's `sur/graph-store.hoon`
 
 ```
 +$  graph         ((mop atom node) gth)
@@ -268,7 +268,7 @@ Here are some helpful wikipedia pages for more info on what this data type repre
 +$  tag-queries   (jug term resource)
 ```
 
-`tag-queries` is a mapping where the keys are `term`s and the values are a `set` of `resource`s (this pattern is called a `jug`). It is a simple tagging system that allows for various ad-hoc collections, similar to filesystem tags being used to sort different files/folders. While the type’s name is `tag-queries`, there is no complex querying system as of now. Currently, you can add term/resources pairs into the tag queries, get a list of all terms in tag-queries, and get the whole `jug` out of Graph Store.
+`tag-queries` is a mapping where the keys are `term`s and the values are a `set` of `resource`s (this pattern is called a `jug`). It is a simple tagging system that allows for various ad-hoc collections, similar to filesystem tags being used to sort different files/folders. While the type's name is `tag-queries`, there is no complex querying system as of now. Currently, you can add term/resources pairs into the tag queries, get a list of all terms in tag-queries, and get the whole `jug` out of Graph Store.
 
 ### Update (Part 1)
 ```
@@ -323,7 +323,7 @@ If you want to check out a relevant code listing to see how graph store handles 
 
 It is important to note that the source of truth is actually the `update-logs`, and not the `graphs`. Similar to the Urbit event log, Graph Store also stores all updates that it receives, so that it can rebuild its current state on demand. The current state of the database is more of a product of the event log, like a checkpoint, or a materialized db view, and is not the source of truth. As a result, the Graph Store database is immutable in nature, where all data is preserved and deleted data is only inaccessible in the current view or checkpoint, and is still present and recoverable by replaying the log.
 
-The reason for having the main CRUD actions being `logged-update`s is so that Graph Store knows which order to process the log entries in when it is rebuilding its current state. The time associated with the `logged-update` is a way of specifying the canonical order to process operations. All other actions that aren’t part of logged-update stand on their own and don’t need a timestamp in order to properly apply them.
+The reason for having the main CRUD actions being `logged-update`s is so that Graph Store knows which order to process the log entries in when it is rebuilding its current state. The time associated with the `logged-update` is a way of specifying the canonical order to process operations. All other actions that aren't part of logged-update stand on their own and don't need a timestamp in order to properly apply them.
 
 ### Permissions
 ```
