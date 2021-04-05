@@ -35,7 +35,7 @@ Anyways, let's get started.
 Here's what the schema of chat looks like:
 
 <p align="center">
-  <img src="images/image10.png"/>
+  <img src="images/image7.png"/>
 </p>
 
 A chat is a flat graph, where all chat messages are nodes appended to the root of the graph. The graph represents a chat channel and contains all chat messages in order. A chat message is a child node of the root graph.
@@ -130,7 +130,7 @@ In this example, a switch statement is used to determine the `permissions` value
 #### Schema
 
 <p align="center">
-  <img src="images/image3.png"/>
+  <img src="images/image9.png"/>
 </p>
 
 The root graph represents the whole Links collection. Every Links entry is a child node of this graph. Every Links entry is made up of:
@@ -185,11 +185,11 @@ It is important to note that you cannot directly edit the url or link afterwards
 #### Permissioning
 
 <p align="center">
-  <img src="images/image14.png"/>
+  <img src="images/image10.png"/>
 </p>
 
 <p align="center">
-  <img src="images/image4.png"/>
+  <img src="images/image11.png"/>
 </p>
 
 Let's analyze the permissions structure.
@@ -279,7 +279,7 @@ Here's how it is implemented:
 #### Schema
 
 <p align="center">
-  <img src="images/image6.png"/>
+  <img src="images/image12.png"/>
 </p>
 
 Here, a notebook, which is a collection of blog posts (called notes), is represented by the root graph. All data associated with the blog post is represented by the top level node, which is the note itself along with the associated comments. One level deeper, we see two container structures. The first one is the post revision container; it holds the edit history of your blog post. Every child node of this corresponds to the actual title and text of your blog post. The second one is the comments container. This represents the comment section of your blog post. Every child node of this is not a comment, but a comment revision container, which, as before, contains the edit history of your comment.
@@ -366,11 +366,11 @@ Notably, the revision container for the blog post itself allows the post to be e
 #### Permissioning
 
 <p align="center">
-  <img src="images/image2.png"/>
+  <img src="images/image13.png"/>
 </p>
 
 <p align="center">
-  <img src="images/image13.png"/>
+  <img src="images/image14.png"/>
 </p>
 
 Let's take a look at the permissioning structure for Publish. 

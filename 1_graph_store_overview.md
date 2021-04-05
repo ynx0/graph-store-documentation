@@ -26,7 +26,7 @@ Graph Store is mainly in charge of two things: data storage and retrieval, and s
 ### Posts
 
 <p align="center">
-  <img src="images/image9.png"/>
+  <img src="images/image2.png"/>
 </p>
 
 Above, we can see a representation of a post on the left, along with its table form on the right.
@@ -48,11 +48,11 @@ Currently, Graph Store supports 5 data types for content that is to be stored wi
 ### Graphs and Nodes
 
 <p align="center">
-  <img src="images/image11.png"/>
+  <img src="images/image3.png"/>
 </p>
 
 <p align="center">
-  <img src="images/image12.png"/>
+  <img src="images/image4.png"/>
 </p>
 
 A graph is a flat, ordered map of nodes, where each node can have a child graph, which is itself a flat ordered map of nodes. Nodes contain a post and a child graph. In the above diagram, we can see an example of a basic graph on the top, along with the underlying structure of the data in table form underneath.
@@ -87,7 +87,7 @@ However, there is no strict requirement for them to be numbers; they can be cord
 ### Structural Nodes vs. Content-Centric Nodes
 
 <p align="center">
-  <img src="images/image7.png"/>
+  <img src="images/image6.png"/>
 </p>
 
 When using Graph Store, there is a notion of **structural nodes** vs. **content-centric nodes**. In the example diagram, we've color coded the different nodes based on what type of node they are. **Content-centric nodes** represent data created or consumed directly by the user. **Structural nodes**, on the other hand do not directly represent user data, and instead represent a higher level relationship between different user data. Structural nodes are used to implement the structure of the schema that is being implemented. In other words, they exist away from the eyes of the user, solely for organizational purposes.
