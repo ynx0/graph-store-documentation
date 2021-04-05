@@ -100,10 +100,10 @@ These types are used to cryptographically sign a given post, so that the host of
 - **Text** - representing plain text content
 - **Url** - specific data type for urls
 - **Mention** - mentioning another ship
-- **Code** - a pair of a piece of code that was executed and it's result (static data, no execution takes place inside of Graph Store)
+- **Code** - a pair of a piece of code that was executed and its result (static data, no execution takes place inside of Graph Store)
 - **Reference** - a reference to another post. Uses the `uid` type under the hood
 
-Currently, these are the only content types supported by graph-store, although there is potential for dynamic content support in the form of a `cage`.
+Currently, these are the only content types supported by Graph Store, although there is potential for dynamic content support in the form of a `cage`.
 
 ### Post
 ```
@@ -245,7 +245,7 @@ A graph is a loosely interconnected set of data which can reference each other a
 
 `graph` is a `mop`, a map which maintains ordering on its keys based on a sorting function also known as an ordered map. A graph's keys are `atom`s representing a node's index fragment and whose values are `node`s, where entries are sorted by largest valued keys first, using `gth` as the sorting function. This is the fundamental data structure used in Graph Store.
 
-Here are some helpful wikipedia pages for more info on what this data type represents:
+Here are some helpful Wikipedia pages for more info on what this data type represents:
 - https://en.wikipedia.org/wiki/Graph_(abstract_data_type)
 - https://en.wikipedia.org/wiki/Graph_database#Background
 - https://en.wikipedia.org/wiki/Graph_(discrete_mathematics)
