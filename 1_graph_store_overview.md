@@ -20,7 +20,7 @@ Graph store is a non-relational database suitable for use in building social med
   <img src="images/image1.png"/>
 </p>
   
-Graph Store is mainly in charge of two things: data storage and retrieval, and schema validation. There are two related tools: Graph Push Hook, which provides permissioning support to Graph Store and acts as a proxy layer to Graph Store for outside ships to access, and Graph Pull Hook, which can be used to request Graph Store data from other ships. Importantly, Graph Store itself does not have a built in permissions system (or rather, is permissions-agnostic), and acts in a purely trusted manner, and assumes that all inputs are trusted This is why Graph Push Hook exists: to mediate untrusted requests from outside ships to your instance of Graph Store, rejecting invalid ones where a ship should not be able to modify the data.
+Graph Store is mainly in charge of two things: data storage and retrieval, and schema validation. There are two related tools: Graph Push Hook, which provides permissioning support to Graph Store and acts as a proxy layer to Graph Store for outside ships to access, and Graph Pull Hook, which can be used to request Graph Store data from other ships. Importantly, Graph Store itself does not have a built-in permissions system (or rather, is permissions-agnostic), and acts in a purely trusted manner, and assumes that all inputs are trusted This is why Graph Push Hook exists: to mediate untrusted requests from outside ships to your instance of Graph Store, rejecting invalid ones where a ship should not be able to modify the data.
 
 ## Data Structures
 ### Posts
@@ -32,7 +32,7 @@ Graph Store is mainly in charge of two things: data storage and retrieval, and s
 Above, we can see a representation of a post on the left, along with its table form on the right.
 A post is the most basic building block of a graph.
 Every post is made up of an:
-- **Author** - the who created the post
+- **Author** - who created the post
 - **Index** - the unique path/identifier of the post on the graph (more on this later)
 - **Time Sent** - when the post was created
 - **Contents** - data that the user intended to post
@@ -41,7 +41,7 @@ Currently, Graph Store supports 5 data types for content that is to be stored wi
 - **Text** - plain text data
 - **Url** - specific data type for urls
 - **Mention** - mentioning another ship
-- **Code** - a pair of a piece of code that was executed and it's result (this is static data, and is not used to execute code on other's ships)
+- **Code** - a pair of a piece of code that was executed and its result (this is static data, and is not used to execute code on other's ships)
 - **Reference** - a reference to another post
 
 
