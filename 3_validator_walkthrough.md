@@ -57,7 +57,7 @@ File: `mar/graph/validator/chat.hoon`
 
 Here are the steps:
 1. Given a noun (we expect an indexed-post)
-1. Try to coerce p to an indexed-post, crash if doesn't cast
+1. Try to coerce p to an indexed-post, crash if it doesn't cast
 1. Assert that the index of the post of the indexed post is only a single atom, i.e., that it is only nested one level deep
 1. Return the indexed post
 
@@ -133,7 +133,7 @@ In this example, a switch statement is used to determine the `permissions` value
   <img src="images/image3.png"/>
 </p>
 
-The root graph represents the whole links collection. Every link entry is a child node of this graph. Every link entry is made up of:
+The root graph represents the whole Links collection. Every Links entry is a child node of this graph. Every Links entry is made up of:
 - The link and its description
 - A comments section
 
