@@ -23,9 +23,9 @@
 
 
 ### Current State of Permissioning
-Please note that as it stands today, the current permissioning system is likely subject to change. In addition, it is by no means the only manner in which to set up permissionings. For many applications, writing a small and bespoke permissioning library may be suitable as an alternative to the `graph-push-hook` permissioning scheme which is what will be covered in the following examples.
+Please note that as it stands today, the current permissioning system is likely subject to change. It is by no means the only manner in which to set up permissionings. For many applications, writing a small and bespoke permissioning library may be suitable as an alternative to the `graph-push-hook` permissioning scheme which is what will be covered in the following examples.
 
-Also, please be aware that the current set of applications use a special type known as `vip-metadata`, which stands for “variation in permission” (not to be confused with VIP meaning “very important person”). It is extra metadata attached to a post that is available to the permissioning arms that is mainly used to specify whether reader comments are enabled or disabled. It is not necessary in order to use %graph-store yourself. Here’s the source if you want to explore: [`sur/metadata-store.hoon#L20-L30`](https://github.com/urbit/urbit/blob/ac096d85ae847fcfe8786b51039c92c69abc006e/pkg/arvo/sur/metadata-store.hoon#L20-L30)
+Also, please be aware that the current set of applications use a special type known as `vip-metadata`, which stands for “variation in permission” (not to be confused with VIP meaning “very important person”). It is extra metadata attached to a post that is available to the permissioning arms that is mainly used to specify whether reader comments are enabled or disabled. Here’s the source if you want to explore: [`sur/metadata-store.hoon#L20-L30`](https://github.com/urbit/urbit/blob/ac096d85ae847fcfe8786b51039c92c69abc006e/pkg/arvo/sur/metadata-store.hoon#L20-L30)
 
 Anyways, let’s get started.
 
@@ -38,7 +38,7 @@ Here’s what the schema of chat looks like:
 	<img src="images/image10.png"/>
 </p>
 
-A chat is a flat graph, where all chat messages are nodes appended to the root of the graph. The graph represents a chat channel and contains all chat messages in order, while a chat message is a child node of the root graph.
+A chat is a flat graph, where all chat messages are nodes appended to the root of the graph. The graph represents a chat channel and contains all chat messages in order. A chat message is a child node of the root graph.
 
 
 Here’s the definition of the schema in the chat validator mark:
@@ -78,7 +78,7 @@ Chat Message `[@ ~]`
   - Admins and Writers have `%yes` add permissions for all nodes at the top level, meaning that they have the ability to post chat messages, even if they did not create the chat channel
   - Readers have `%no` add privileges for any nodes at the root level, so they do not have the ability to post chat messages
 - Remove Privileges
-  - Admins and Writers have %self remove privileges, meaning that they may only delete chat messages that they posted, not anyone else’s
+  - Admins and Writers have `%self` remove privileges, meaning that they may only delete chat messages that they posted, not anyone else’s
   - Readers have `%no` remove privileges for any nodes, meaning they cannot delete any chat messages
 
 This follows our general intuition of how permissions for chat messages should be structured.
@@ -110,7 +110,7 @@ Here is the `grow` arm of `mar/validator/chat.hoon`
 In line A, we accept an `indexed-post` that is used in the rest of the `grow` arm.
 
 `graph-permissions-add`
-1. Accept a noun `vip` of type vip-metadata
+1. Accept a noun `vip` of type `vip-metadata`
 2. Switch on the index of the post found in `i`, crashing if no successful matches occur
 3. If the index is nested one level deep
 4. Return a `permissions` noun defined as: [admin: %yes, writer: %yes, reader: %no]
@@ -123,7 +123,7 @@ In line A, we accept an `indexed-post` that is used in the rest of the `grow` ar
 7. If the index is nested one level deep
 8. Return a `permissions` noun defined as: [admin: %self, writer: %self, reader: %no]
 
-We can see that not a lot is going on in this example. Just a simple switch statement that matches cases based on the index of the post, and returns the `permissions` values based on the theory explained earlier.
+In this example, a switch statement is used to determine the `permissions` values based on the index of the post.
 
 
 ### Links
@@ -138,7 +138,7 @@ The root graph represents the whole links collection. Every link entry is a chil
 - A comments section
 
 
-The comments section holds all individual comment nodes, but comments are not simple leaf nodes. An individual comment is actually a structural node that acts as a revision container, storing the comment’s full edit history by storing each edit as a child node. The frontend is responsible for properly displaying the latest revision of the comment.
+The comments section holds all individual comment nodes, but comments are not simple leaf nodes. An individual comment is actually a structural node that acts as a revision container, storing the comment’s full edit history by storing each edit as a child node. The front-end is responsible for properly displaying the latest revision of the comment.
 
 
 Here's the validator, located at `mar/graph/validator/link.hoon`:
@@ -230,30 +230,29 @@ Here’s how it is implemented:
 <ol>
     <li>Accept a noun <code>vip</code> of type vip-metadata
         <ul>
-            <li>Declare a variable <code>reader</code>, a flag which is true if reader comments are enabled, false otherwise
-            </li>
+            <li>Declare a variable <code>reader</code>, a flag which is true if reader comments are enabled, false otherwise</li>
         </ul>
     </li>
     <li>Switch on the index of the post found in <code>i</code>, crashing if no successful matches occur</li>
     <li>If the index is nested one level deep, return a <code>permissions</code> noun defined as:
         <ul>
-            <li>Admin - %yes</li>
-            <li>Writer - %yes</li>
-            <li>Reader: %no</li>
+		<li>Admin - <code>%yes</code></li>
+		<li>Writer - <code>%yes</code></li>
+		<li>Reader: <code>%no</code></li>
         </ul>
     </li>
     <li>If the index is nested two levels deep, return a <code>permissions</code> noun defined as:
         <ul>
-            <li>Admin - %yes</li>
-            <li>Writer - %yes</li>
-            <li>Reader: %yes if reader comments are enabled, else %no</li>
+		<li>Admin - <code>%yes</code></li>
+		<li>Writer - <code>%yes</code></li>
+		<li>Reader: <code>%yes</code> if reader comments are enabled, else <code>%no</code></li>
         </ul>
     </li>
     <li>If the index is nested three levels deep, return a <code>permissions</code> noun defined as:
         <ul>
-            <li>Admin - %yes</li>
-            <li>Writer - %yes</li>
-            <li>Reader: %yes if reader comments are enabled, else %no</li>
+		<li>Admin - <code>%yes</code></li>
+		<li>Writer - <code>%yes</code></li>
+		<li>Reader: <code>%yes</code> if reader comments are enabled, else <code>%no</code></li>
         </ul>
     </li>
 </ol>
@@ -266,14 +265,14 @@ Here’s how it is implemented:
     <li>Switch on the index of the post found in <code>i</code>, crashing if no successful matches occur</li>
     <li>If the index is nested one level deep, two levels deep, or three levels deep, return a <code>permissions</code> noun defined as:
         <ul>
-            <li>Admin - %yes</li>
-            <li>Writer - %self</li>
-            <li>Reader: %self</li>
+		<li>Admin - <code>%yes</code></li>
+		<li>Writer - <code>%self</code></li>
+		<li>Reader: <code>%self</code></li>
         </ul>
     </li>
 </ol>
 
-We can see that not a lot is going on in this example. Just a simple switch statement that matches cases based on the index of the post, and returns the `permissions` values based on the theory explained earlier.
+
 
 ### Publish
 
@@ -330,7 +329,7 @@ Here’s its validator
 Walkthrough
 
 
-<ol style="ol[type=a] {list-style-type: lower-alpha;}">
+<ol>
   <!-- WHYYYYY GITHUB WHY -->
   <li>Get the post as a noun</li>
   <li>Force cast to indexed post</li>
@@ -410,30 +409,30 @@ Let’s take a look at the permissioning structure for Publish.
     <li>Switch on the index of the post found in <code>i</code>, crashing if no successful matches occur</li>
     <li>If the index is nested one level deep, return a <code>permissions</code> noun defined as:
         <ul>
-            <li>Admin - %yes</li>
-            <li>Writer - %yes</li>
-            <li>Reader: %no</li>
+		<li>Admin - <code>%yes</code></li>
+		<li>Writer - <code>%yes</code></li>
+		<li>Reader: <code>%no</code></li>
         </ul>
     </li>
     <li>If the index is nested three levels deep and has a 1 as its 2nd index fragment, return a <code>permissions</code> noun defined as:
         <ul>
-            <li>Admin - %self</li>
-            <li>Writer - %self</li>
-            <li>Reader: %no</li>
+		<li>Admin - <code>%self</code></li>
+		<li>Writer - <code>%self</code></li>
+		<li>Reader: <code>%no</code></li>
         </ul>
     </li>
     <li>If the index is nested three levels deep and has a 2 as its 2nd index fragment, return a <code>permissions</code> noun defined as:
         <ul>
-            <li>Admin - %yes</li>
-            <li>Writer - %yes</li>
-            <li>Reader: %yes if reader comments are enabled, else %no</li>
+		<li>Admin - <code>%yes</code></li>
+		<li>Writer - <code>%yes</code></li>
+		<li>Reader: <code>%yes</code> if reader comments are enabled, else <code>%no</code></li>
         </ul>
     </li>
     <li>If the index is nested four levels deep and has a 2 as its 2nd index fragment, return a <code>permissions</code> noun defined as:
         <ul>
-            <li>Admin - %self</li>
-            <li>Writer - %self</li>
-            <li>Reader: %self</li>
+		<li>Admin - <code>%self</code></li>
+		<li>Writer - <code>%self</code></li>
+		<li>Reader: <code>%self</code></li>
         </ul>
     </li>
 </ol>
@@ -441,14 +440,14 @@ Let’s take a look at the permissioning structure for Publish.
 
 `graph-permissions-remove`
 <ol>
-    <li>Accept a noun <code>vip</code> of type vip-metadata</li>
-    <li>Declare a variable <code>reader</code>, a flag which is true if reader comments are enabled, false otherwise</li>
-    <li>Switch on the index of the post found in <code>i</code>, crashing if no successful matches occur</li>
+	<li>Accept a noun <code>vip</code> of type <code>vip-metadata</code></li>
+	<li>Declare a variable <code>reader</code>, a flag which is true if reader comments are enabled, false otherwise</li>
+	<li>Switch on the index of the post found in <code>i</code>, crashing if no successful matches occur</li>
     <li>If the index is nested one level deep, two levels deep, or three levels deep, return a <code>permissions</code> noun defined as:
         <ul>
-            <li>Admin - %yes</li>
-            <li>Writer - %self</li>
-            <li>Reader: %self</li>
+            <li>Admin - <code>%yes</code></li>
+			<li>Writer - <code>%self</code></li>
+			<li>Reader: <code>%self</code></li>
         </ul>
     </li>
 </ol>
@@ -457,9 +456,9 @@ Let’s take a look at the permissioning structure for Publish.
 ### General Patterns
 #### Schemas
 The general pattern for enforcing a schema in a validator is to:
-- Cast the incoming data as an indexed-post
-- Switch on the index, matching by its depth and structure
-- Validate the structure of the contents of the post based on what we expect to see at that level of nesting (can be semantically rather than simply presence or absence of data)
+1. Cast the incoming data as an `indexed-post`
+1. Switch on the index, matching by its depth and structure
+1. Validate the structure of the contents of the post based on what we expect to see at that level of nesting. This logic can definitely be more involved than simply presence or absence of data.
 
 When designing your schema, it may help to decide first what data the user will be directly consuming or producing, then try to think of what extra information and structure is needed to support that. For instance, if you may want a user to be able to enter a comment, then later realize that you need a structural node that contains the whole comments section. One pattern that we can see is that all structural nodes tend to have empty contents. Another pattern we can see is that all leaf nodes have their contents set.
 
@@ -470,22 +469,18 @@ In general, validators can be as robust and expressive as desired, because the m
 In general, you want to first have your schema finalized, then at every node ask the question: who should be able to modify (add/remove) this node, and its children if present in your schema. You may find that you don’t need to set permission for every single type of node afterwards, although being thorough can help to find bugs in permissioning early on. Writing out the permissions in plain words and bullet points, sketching them out in the form of a table, then splitting it up into the code can also make the design process easier.
 
 ### Earth/Mars Interface Details
-There are a few general ways to talk to graph-store. You can either interact with %graph-store directly from the dojo, or through HTTP requests. You can do pokes/scries/spiders through either the dojo or http. In the case of HTTP requests, get requests can be used for pokes or scries, while post requests can be used to start spider threads. You can also create subscriptions which are long lived connections where you get a continual stream of updates from graph-store.
-***
+There are a few general ways to talk to a Graph Store gall agent. You can either interact with the agent in the form of pokes/scries/spiders either directly from the dojo, or through HTTP requests via Eyre.
 
-All graph store applications are going to have a mark, which are applied to data going in or coming out.
-
-- In the case of data going in, you pass in a marked-graph which %graph-store uses to validate the whole graph with. In the case of adding a node to a graph, the node will simply be checked for validity using the existing mark since the mark is already set on a per-graph basis.
-
-- In the case of data coming out, eyre forcibly tries to convert the hoon noun into json, and silently fails if no json conversion exists. This process is handled by Graph Store under the hood because all graphs have a well-defined en-json/de-json format, so you never have to worry about making your own (de)serialization arms.
-
-- In addition, eyre lets you choose the mark you scry for by specifying the desired format in the url while making the HTTP request.
+- All graph store applications are going to have a mark, which are applied to data going in or coming out
+- Eyre lets you choose the mark you scry for by specifying the desired format in the url while making the HTTP request
+- In the case of data going in, you pass in a `marked-graph` which the Graph Store agent uses to validate the whole `graph` with. In the case of adding a node to a graph, the node will simply be checked for validity using the existing mark since the mark is already set on a per-graph basis
+- In the case of data coming out, Eyre forcibly tries to convert the hoon noun into json, and silently fails if no json conversion exists. This process is handled by Graph Store under the hood because all graphs have a well-defined en-json/de-json format, so you never have to worry about making your own de/serialization arms.
 
 
 Code References
 - [`interface/src/logic/api/base.ts#L62`](https://github.com/urbit/urbit/blob/master/pkg/interface/src/logic/api/base.ts#L62)
 - [`mar/graph/update.hoon`](https://github.com/urbit/urbit/blob/e2ad6e3e9219c8bfad62f27f05c7cac94c9effa8/pkg/arvo/mar/graph/update.hoon)
-- [`sys/vane/eyre.hoon#L1617-L1625`](https://github.com/urbit/urbit/blob/ac096d85ae847fcfe8786b51039c92c69abc006e/pkg/arvo/sys/vane/eyre.hoon#L1617-L1625) shows how eyre applies marks
+- [`sys/vane/eyre.hoon#L1617-L1625`](https://github.com/urbit/urbit/blob/ac096d85ae847fcfe8786b51039c92c69abc006e/pkg/arvo/sys/vane/eyre.hoon#L1617-L1625) shows how Eyre applies marks
 
 ## [Next](./4_advanced_info.md)
 ## [Home](./README.md)
