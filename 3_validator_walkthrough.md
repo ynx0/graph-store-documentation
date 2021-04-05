@@ -25,23 +25,23 @@
 ### Current State of Permissioning
 Please note that as it stands today, the current permissioning system is likely subject to change. It is by no means the only manner in which to set up permissionings. For many applications, writing a small and bespoke permissioning library may be suitable as an alternative to the `graph-push-hook` permissioning scheme which is what will be covered in the following examples.
 
-Also, please be aware that the current set of applications use a special type known as `vip-metadata`, which stands for “variation in permission” (not to be confused with VIP meaning “very important person”). It is extra metadata attached to a post that is available to the permissioning arms that is mainly used to specify whether reader comments are enabled or disabled. Here’s the source if you want to explore: [`sur/metadata-store.hoon#L20-L30`](https://github.com/urbit/urbit/blob/ac096d85ae847fcfe8786b51039c92c69abc006e/pkg/arvo/sur/metadata-store.hoon#L20-L30)
+Also, please be aware that the current set of applications use a special type known as `vip-metadata`, which stands for “variation in permission” (not to be confused with VIP meaning “very important person”). It is extra metadata attached to a post that is available to the permissioning arms that is mainly used to specify whether reader comments are enabled or disabled. Here's the source if you want to explore: [`sur/metadata-store.hoon#L20-L30`](https://github.com/urbit/urbit/blob/ac096d85ae847fcfe8786b51039c92c69abc006e/pkg/arvo/sur/metadata-store.hoon#L20-L30)
 
-Anyways, let’s get started.
+Anyways, let's get started.
 
 
 ### Chat
 #### Schema
-Here’s what the schema of chat looks like:
+Here's what the schema of chat looks like:
 
 <p align="center">
-	<img src="images/image10.png"/>
+  <img src="images/image10.png"/>
 </p>
 
 A chat is a flat graph, where all chat messages are nodes appended to the root of the graph. The graph represents a chat channel and contains all chat messages in order. A chat message is a child node of the root graph.
 
 
-Here’s the definition of the schema in the chat validator mark:
+Here's the definition of the schema in the chat validator mark:
 File: `mar/graph/validator/chat.hoon`
 ```
 ++  grab
@@ -57,7 +57,7 @@ File: `mar/graph/validator/chat.hoon`
 
 Here are the steps:
 1. Given a noun (we expect an indexed-post)
-1. Try to coerce p to an indexed-post, crash if doesn’t cast
+1. Try to coerce p to an indexed-post, crash if doesn't cast
 1. Assert that the index of the post of the indexed post is only a single atom, i.e., that it is only nested one level deep
 1. Return the indexed post
 
@@ -68,23 +68,23 @@ Since the schema of the chat application is simple enough, it has no need for st
 #### Permissioning
 
 <p align="center">
-	<img src="images/image8.png"/>
+  <img src="images/image8.png"/>
 </p>
 
-Let’s take a look at the permissions table in the diagram.
+Let's take a look at the permissions table in the diagram.
 
 Chat Message `[@ ~]`
 - Add Privileges
   - Admins and Writers have `%yes` add permissions for all nodes at the top level, meaning that they have the ability to post chat messages, even if they did not create the chat channel
   - Readers have `%no` add privileges for any nodes at the root level, so they do not have the ability to post chat messages
 - Remove Privileges
-  - Admins and Writers have `%self` remove privileges, meaning that they may only delete chat messages that they posted, not anyone else’s
+  - Admins and Writers have `%self` remove privileges, meaning that they may only delete chat messages that they posted, not anyone else's
   - Readers have `%no` remove privileges for any nodes, meaning they cannot delete any chat messages
 
 This follows our general intuition of how permissions for chat messages should be structured.
-For example, it wouldn’t make sense to give readers `%self`, because they do not have the ability to create nodes in the first place, so they will never be in a position to delete any nodes.
+For example, it wouldn't make sense to give readers `%self`, because they do not have the ability to create nodes in the first place, so they will never be in a position to delete any nodes.
 
-Let’s see how this permissioning system is implemented in the validator code.
+Let's see how this permissioning system is implemented in the validator code.
 
 Here is the `grow` arm of `mar/validator/chat.hoon`
 ```
@@ -130,7 +130,7 @@ In this example, a switch statement is used to determine the `permissions` value
 #### Schema
 
 <p align="center">
-	<img src="images/image3.png"/>
+  <img src="images/image3.png"/>
 </p>
 
 The root graph represents the whole links collection. Every link entry is a child node of this graph. Every link entry is made up of:
@@ -138,7 +138,7 @@ The root graph represents the whole links collection. Every link entry is a chil
 - A comments section
 
 
-The comments section holds all individual comment nodes, but comments are not simple leaf nodes. An individual comment is actually a structural node that acts as a revision container, storing the comment’s full edit history by storing each edit as a child node. The front-end is responsible for properly displaying the latest revision of the comment.
+The comments section holds all individual comment nodes, but comments are not simple leaf nodes. An individual comment is actually a structural node that acts as a revision container, storing the comment's full edit history by storing each edit as a child node. The front-end is responsible for properly displaying the latest revision of the comment.
 
 
 Here's the validator, located at `mar/graph/validator/link.hoon`:
@@ -185,18 +185,18 @@ It is important to note that you cannot directly edit the url or link afterwards
 #### Permissioning
 
 <p align="center">
-	<img src="images/image14.png"/>
+  <img src="images/image14.png"/>
 </p>
 
 <p align="center">
-	<img src="images/image4.png"/>
+  <img src="images/image4.png"/>
 </p>
 
-Let’s analyze the permissions structure.
+Let's analyze the permissions structure.
 
 **TODO** *stubbed out awaiting potential changes in source*
 
-Here’s how it is implemented:
+Here's how it is implemented:
 
 ```
 |_  i=indexed-post
@@ -236,23 +236,23 @@ Here’s how it is implemented:
     <li>Switch on the index of the post found in <code>i</code>, crashing if no successful matches occur</li>
     <li>If the index is nested one level deep, return a <code>permissions</code> noun defined as:
         <ul>
-		<li>Admin - <code>%yes</code></li>
-		<li>Writer - <code>%yes</code></li>
-		<li>Reader: <code>%no</code></li>
+    <li>Admin - <code>%yes</code></li>
+    <li>Writer - <code>%yes</code></li>
+    <li>Reader: <code>%no</code></li>
         </ul>
     </li>
     <li>If the index is nested two levels deep, return a <code>permissions</code> noun defined as:
         <ul>
-		<li>Admin - <code>%yes</code></li>
-		<li>Writer - <code>%yes</code></li>
-		<li>Reader: <code>%yes</code> if reader comments are enabled, else <code>%no</code></li>
+    <li>Admin - <code>%yes</code></li>
+    <li>Writer - <code>%yes</code></li>
+    <li>Reader: <code>%yes</code> if reader comments are enabled, else <code>%no</code></li>
         </ul>
     </li>
     <li>If the index is nested three levels deep, return a <code>permissions</code> noun defined as:
         <ul>
-		<li>Admin - <code>%yes</code></li>
-		<li>Writer - <code>%yes</code></li>
-		<li>Reader: <code>%yes</code> if reader comments are enabled, else <code>%no</code></li>
+    <li>Admin - <code>%yes</code></li>
+    <li>Writer - <code>%yes</code></li>
+    <li>Reader: <code>%yes</code> if reader comments are enabled, else <code>%no</code></li>
         </ul>
     </li>
 </ol>
@@ -265,9 +265,9 @@ Here’s how it is implemented:
     <li>Switch on the index of the post found in <code>i</code>, crashing if no successful matches occur</li>
     <li>If the index is nested one level deep, two levels deep, or three levels deep, return a <code>permissions</code> noun defined as:
         <ul>
-		<li>Admin - <code>%yes</code></li>
-		<li>Writer - <code>%self</code></li>
-		<li>Reader: <code>%self</code></li>
+    <li>Admin - <code>%yes</code></li>
+    <li>Writer - <code>%self</code></li>
+    <li>Reader: <code>%self</code></li>
         </ul>
     </li>
 </ol>
@@ -279,12 +279,12 @@ Here’s how it is implemented:
 #### Schema
 
 <p align="center">
-	<img src="images/image6.png"/>
+  <img src="images/image6.png"/>
 </p>
 
 Here, a notebook, which is a collection of blog posts (called notes), is represented by the root graph. All data associated with the blog post is represented by the top level node, which is the note itself along with the associated comments. One level deeper, we see two container structures. The first one is the post revision container; it holds the edit history of your blog post. Every child node of this corresponds to the actual title and text of your blog post. The second one is the comments container. This represents the comment section of your blog post. Every child node of this is not a comment, but a comment revision container, which, as before, contains the edit history of your comment.
 
-Here’s its validator
+Here's its validator
 ```
   ++  noun
     |=  p=*                            :: 1
@@ -337,22 +337,22 @@ Walkthrough
   <li>If the node is nested one level deep
     <ol type="a"><li>Ensure that its contents are empty. The top level node is a structural node containing all of the post and associated data.</li></ol>
   </li>
-  <li>If it is nested 2 levels deep and contains a 1 as it’s last index fragment
+  <li>If it is nested 2 levels deep and contains a 1 as it's last index fragment
     <ol type="a"><li>Ensure that its contents are empty. This is a structural node for holding revisions to the blog post.</li></ol>
   </li>
-  <li>If the node is nested three levels deep, and has a 1 as it’s second index fragment
+  <li>If the node is nested three levels deep, and has a 1 as it's second index fragment
     <ol type="a">
       <li>Ensure that its contents is a list of at least 2 elements</li>
       <li>Ensure that the first element of contents has a content type of text</li>
     </ol>
   </li>
-  <li>If the node is nested two levels deep, and has a 2 as it’s last index fragment
+  <li>If the node is nested two levels deep, and has a 2 as it's last index fragment
     <ol type="a"><li>Ensure that its contents are empty. This is a structural node for holding comments.</li></ol>
   </li>
-  <li>If the node is nested three levels deep, and has a 2 as it’s second index fragment
+  <li>If the node is nested three levels deep, and has a 2 as it's second index fragment
     <ol type="a"><li>Ensure that its contents are empty. This is a structural node for holding revisions of a specific comment.</li></ol>
   </li>
-  <li>If the node is nested four levels deep, and has a 2 as it’s second index fragment
+  <li>If the node is nested four levels deep, and has a 2 as it's second index fragment
     <ol type="a"><li>Ensure that contents has type `cell`. This is a specific revision of a comment</li></ol>
   </li>
 </ol>
@@ -366,14 +366,14 @@ Notably, the revision container for the blog post itself allows the post to be e
 #### Permissioning
 
 <p align="center">
-	<img src="images/image2.png"/>
+  <img src="images/image2.png"/>
 </p>
 
 <p align="center">
-	<img src="images/image13.png"/>
+  <img src="images/image13.png"/>
 </p>
 
-Let’s take a look at the permissioning structure for Publish. 
+Let's take a look at the permissioning structure for Publish. 
 
 **TODO** *stubbed out awaiting potential changes in source*
 
@@ -409,30 +409,30 @@ Let’s take a look at the permissioning structure for Publish.
     <li>Switch on the index of the post found in <code>i</code>, crashing if no successful matches occur</li>
     <li>If the index is nested one level deep, return a <code>permissions</code> noun defined as:
         <ul>
-		<li>Admin - <code>%yes</code></li>
-		<li>Writer - <code>%yes</code></li>
-		<li>Reader: <code>%no</code></li>
+    <li>Admin - <code>%yes</code></li>
+    <li>Writer - <code>%yes</code></li>
+    <li>Reader: <code>%no</code></li>
         </ul>
     </li>
     <li>If the index is nested three levels deep and has a 1 as its 2nd index fragment, return a <code>permissions</code> noun defined as:
         <ul>
-		<li>Admin - <code>%self</code></li>
-		<li>Writer - <code>%self</code></li>
-		<li>Reader: <code>%no</code></li>
+    <li>Admin - <code>%self</code></li>
+    <li>Writer - <code>%self</code></li>
+    <li>Reader: <code>%no</code></li>
         </ul>
     </li>
     <li>If the index is nested three levels deep and has a 2 as its 2nd index fragment, return a <code>permissions</code> noun defined as:
         <ul>
-		<li>Admin - <code>%yes</code></li>
-		<li>Writer - <code>%yes</code></li>
-		<li>Reader: <code>%yes</code> if reader comments are enabled, else <code>%no</code></li>
+    <li>Admin - <code>%yes</code></li>
+    <li>Writer - <code>%yes</code></li>
+    <li>Reader: <code>%yes</code> if reader comments are enabled, else <code>%no</code></li>
         </ul>
     </li>
     <li>If the index is nested four levels deep and has a 2 as its 2nd index fragment, return a <code>permissions</code> noun defined as:
         <ul>
-		<li>Admin - <code>%self</code></li>
-		<li>Writer - <code>%self</code></li>
-		<li>Reader: <code>%self</code></li>
+    <li>Admin - <code>%self</code></li>
+    <li>Writer - <code>%self</code></li>
+    <li>Reader: <code>%self</code></li>
         </ul>
     </li>
 </ol>
@@ -440,14 +440,14 @@ Let’s take a look at the permissioning structure for Publish.
 
 `graph-permissions-remove`
 <ol>
-	<li>Accept a noun <code>vip</code> of type <code>vip-metadata</code></li>
-	<li>Declare a variable <code>reader</code>, a flag which is true if reader comments are enabled, false otherwise</li>
-	<li>Switch on the index of the post found in <code>i</code>, crashing if no successful matches occur</li>
+  <li>Accept a noun <code>vip</code> of type <code>vip-metadata</code></li>
+  <li>Declare a variable <code>reader</code>, a flag which is true if reader comments are enabled, false otherwise</li>
+  <li>Switch on the index of the post found in <code>i</code>, crashing if no successful matches occur</li>
     <li>If the index is nested one level deep, two levels deep, or three levels deep, return a <code>permissions</code> noun defined as:
         <ul>
             <li>Admin - <code>%yes</code></li>
-			<li>Writer - <code>%self</code></li>
-			<li>Reader: <code>%self</code></li>
+      <li>Writer - <code>%self</code></li>
+      <li>Reader: <code>%self</code></li>
         </ul>
     </li>
 </ol>
@@ -466,7 +466,7 @@ In general, validators can be as robust and expressive as desired, because the m
 
 
 #### Permissions
-In general, you want to first have your schema finalized, then at every node ask the question: who should be able to modify (add/remove) this node, and its children if present in your schema. You may find that you don’t need to set permission for every single type of node afterwards, although being thorough can help to find bugs in permissioning early on. Writing out the permissions in plain words and bullet points, sketching them out in the form of a table, then splitting it up into the code can also make the design process easier.
+In general, you want to first have your schema finalized, then at every node ask the question: who should be able to modify (add/remove) this node, and its children if present in your schema. You may find that you don't need to set permission for every single type of node afterwards, although being thorough can help to find bugs in permissioning early on. Writing out the permissions in plain words and bullet points, sketching them out in the form of a table, then splitting it up into the code can also make the design process easier.
 
 ### Earth/Mars Interface Details
 There are a few general ways to talk to a Graph Store gall agent. You can either interact with the agent in the form of pokes/scries/spiders either directly from the dojo, or through HTTP requests via Eyre.
